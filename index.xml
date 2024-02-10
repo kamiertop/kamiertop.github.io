@@ -5,13 +5,5 @@
     <description>KamiertopのBlogSite</description>
     <generator>Hugo -- gohugo.io</generator><language>zh-CN</language><lastBuildDate>Wed, 31 Jan 2024 21:41:07 &#43;0800</lastBuildDate>
       <atom:link href="https://kamiertop.github.io/index.xml" rel="self" type="application/rss+xml" />
-    <item>
-  <title>BuildSite</title>
-  <link>https://kamiertop.github.io/posts/8872337/</link>
-  <pubDate>Wed, 31 Jan 2024 21:41:07 &#43;0800</pubDate>
-  <author>XiaoLiang</author>
-  <guid>https://kamiertop.github.io/posts/8872337/</guid>
-  <description><![CDATA[Build My Blog Site use hugo and fixit]]></description>
-</item>
-</channel>
+    </channel>
 </rss>
