@@ -3,5 +3,13 @@
     <title>Tags - 标签 - KamiertopのBlogSite</title>
     <link>https://kamiertop.github.io/tags/</link>
     <description>Tags - 标签 | KamiertopのBlogSite</description>
-    <generator>Hugo -- gohugo.io</generator><language>zh-CN</language><atom:link href="https://kamiertop.github.io/tags/" rel="self" type="application/rss+xml" /></channel>
+    <generator>Hugo -- gohugo.io</generator><language>zh-CN</language><lastBuildDate>Wed, 13 Mar 2024 00:22:17 &#43;0800</lastBuildDate><atom:link href="https://kamiertop.github.io/tags/" rel="self" type="application/rss+xml" /><item>
+  <title>cncf</title>
+  <link>https://kamiertop.github.io/tags/cncf/</link>
+  <pubDate>Wed, 13 Mar 2024 00:22:17 &#43;0800</pubDate>
+  <author>XiaoLiang</author>
+  <guid>https://kamiertop.github.io/tags/cncf/</guid>
+  <description><![CDATA[]]></description>
+</item>
+</channel>
 </rss>

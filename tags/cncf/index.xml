@@ -1,11 +1,9 @@
 <rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0">
   <channel>
-    <title>KamiertopのBlogSite</title>
-    <link>https://kamiertop.github.io/</link>
-    <description>KamiertopのBlogSite</description>
-    <generator>Hugo -- gohugo.io</generator><language>zh-CN</language><lastBuildDate>Wed, 13 Mar 2024 00:22:17 &#43;0800</lastBuildDate>
-      <atom:link href="https://kamiertop.github.io/index.xml" rel="self" type="application/rss+xml" />
-    <item>
+    <title>cncf - 标签 - KamiertopのBlogSite</title>
+    <link>https://kamiertop.github.io/tags/cncf/</link>
+    <description>cncf - 标签 | KamiertopのBlogSite</description>
+    <generator>Hugo -- gohugo.io</generator><language>zh-CN</language><lastBuildDate>Wed, 13 Mar 2024 00:22:17 &#43;0800</lastBuildDate><atom:link href="https://kamiertop.github.io/tags/cncf/" rel="self" type="application/rss+xml" /><item>
   <title>K8s V1.29集群搭建-避坑指南</title>
   <link>https://kamiertop.github.io/posts/7cdb26e/</link>
   <pubDate>Wed, 13 Mar 2024 00:22:17 &#43;0800</pubDate>
