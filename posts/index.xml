@@ -1,0 +1,39 @@
+<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0">
+  <channel>
+    <title>所有文章 - KamiertopのBlogSite</title>
+    <link>https://kamiertop.github.io/posts/</link>
+    <description>所有文章 | KamiertopのBlogSite</description>
+    <generator>Hugo -- gohugo.io</generator><language>zh-CN</language><lastBuildDate>Sun, 16 Jun 2024 14:32:10 &#43;0800</lastBuildDate><atom:link href="https://kamiertop.github.io/posts/" rel="self" type="application/rss+xml" /><item>
+  <title>Windows10 Vmware17 安装Centos-9-stream 引导界面卡顿</title>
+  <link>https://kamiertop.github.io/posts/19d1fbf/</link>
+  <pubDate>Sun, 16 Jun 2024 14:32:10 &#43;0800</pubDate>
+  <author>XiaoLiang</author>
+  <guid>https://kamiertop.github.io/posts/19d1fbf/</guid>
+  <description><![CDATA[]]></description>
+</item>
+<item>
+  <title>Win10 Rust FFI</title>
+  <link>https://kamiertop.github.io/posts/83fa5b2/</link>
+  <pubDate>Fri, 07 Jun 2024 17:29:16 &#43;0800</pubDate>
+  <author>XiaoLiang</author>
+  <guid>https://kamiertop.github.io/posts/83fa5b2/</guid>
+  <description><![CDATA[]]></description>
+</item>
+<item>
+  <title>K8s V1.29集群搭建-避坑指南</title>
+  <link>https://kamiertop.github.io/posts/7cdb26e/</link>
+  <pubDate>Wed, 13 Mar 2024 00:22:17 &#43;0800</pubDate>
+  <author>XiaoLiang</author>
+  <guid>https://kamiertop.github.io/posts/7cdb26e/</guid>
+  <description><![CDATA[在国内搭建起k8s集群属实不易, 全是泪]]></description>
+</item>
+<item>
+  <title>BuildSite</title>
+  <link>https://kamiertop.github.io/posts/8872337/</link>
+  <pubDate>Wed, 31 Jan 2024 21:41:07 &#43;0800</pubDate>
+  <author>XiaoLiang</author>
+  <guid>https://kamiertop.github.io/posts/8872337/</guid>
+  <description><![CDATA[记录小站搭建]]></description>
+</item>
+</channel>
+</rss>

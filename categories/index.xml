@@ -1,0 +1,23 @@
+<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0">
+  <channel>
+    <title>categories - 分类 - KamiertopのBlogSite</title>
+    <link>https://kamiertop.github.io/categories/</link>
+    <description>categories - 分类 | KamiertopのBlogSite</description>
+    <generator>Hugo -- gohugo.io</generator><language>zh-CN</language><lastBuildDate>Fri, 07 Jun 2024 17:29:16 &#43;0800</lastBuildDate><atom:link href="https://kamiertop.github.io/categories/" rel="self" type="application/rss+xml" /><item>
+  <title>Rust</title>
+  <link>https://kamiertop.github.io/categories/rust/</link>
+  <pubDate>Fri, 07 Jun 2024 17:29:16 &#43;0800</pubDate>
+  <author>XiaoLiang</author>
+  <guid>https://kamiertop.github.io/categories/rust/</guid>
+  <description><![CDATA[]]></description>
+</item>
+<item>
+  <title>cncf</title>
+  <link>https://kamiertop.github.io/categories/cncf/</link>
+  <pubDate>Wed, 13 Mar 2024 00:22:17 &#43;0800</pubDate>
+  <author>XiaoLiang</author>
+  <guid>https://kamiertop.github.io/categories/cncf/</guid>
+  <description><![CDATA[]]></description>
+</item>
+</channel>
+</rss>
