@@ -4,6 +4,14 @@
     <link>https://kamiertop.github.io/posts/</link>
     <description>所有文章 | KamiertopのBlogSite</description>
     <generator>Hugo -- gohugo.io</generator><language>zh-CN</language><lastBuildDate>Tue, 18 Jun 2024 22:20:25 &#43;0800</lastBuildDate><atom:link href="https://kamiertop.github.io/posts/" rel="self" type="application/rss+xml" /><item>
+  <title>Golang在工程实践中的错误处理</title>
+  <link>https://kamiertop.github.io/posts/904687d/</link>
+  <pubDate>Tue, 18 Jun 2024 22:20:25 &#43;0800</pubDate>
+  <author>XiaoLiang</author>
+  <guid>https://kamiertop.github.io/posts/904687d/</guid>
+  <description><![CDATA[]]></description>
+</item>
+<item>
   <title>Windows10 Vmware17 安装Centos-9-stream 引导界面卡顿</title>
   <link>https://kamiertop.github.io/posts/19d1fbf/</link>
   <pubDate>Sun, 16 Jun 2024 14:32:10 &#43;0800</pubDate>
