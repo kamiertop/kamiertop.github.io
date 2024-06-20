@@ -7,13 +7,15 @@
     <meta name="robots" content="noodp" />
     <title>Golang在工程实践中的错误处理 - KamiertopのBlogSite</title><meta name="author" content="XiaoLiang">
 <meta name="author-link" content="">
-<meta name="description" content="" />
+<meta name="description" content="Golang在工程实践中的错误处理 -- 石墨文档产研负责人[彭友顺]" />
   <meta itemprop="name" content="Golang在工程实践中的错误处理">
+  <meta itemprop="description" content="Golang在工程实践中的错误处理 -- 石墨文档产研负责人[彭友顺]">
   <meta itemprop="datePublished" content="2024-06-18T22:20:25+08:00">
   <meta itemprop="dateModified" content="2024-06-18T22:20:25+08:00">
   <meta itemprop="wordCount" content="1040"><meta property="og:url" content="https://kamiertop.github.io/posts/904687d/">
   <meta property="og:site_name" content="KamiertopのBlogSite">
   <meta property="og:title" content="Golang在工程实践中的错误处理">
+  <meta property="og:description" content="Golang在工程实践中的错误处理 -- 石墨文档产研负责人[彭友顺]">
   <meta property="og:locale" content="zh_CN">
   <meta property="og:type" content="article">
     <meta property="article:section" content="posts">
@@ -22,10 +24,11 @@
 
   <meta name="twitter:card" content="summary">
   <meta name="twitter:title" content="Golang在工程实践中的错误处理">
+  <meta name="twitter:description" content="Golang在工程实践中的错误处理 -- 石墨文档产研负责人[彭友顺]">
 <meta name="application-name" content="FixIt">
 <meta name="apple-mobile-web-app-title" content="FixIt"><meta name="theme-color" data-light="#f8f8f8" data-dark="#252627" content="#f8f8f8"><meta name="msapplication-TileColor" content="#da532c"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
     <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="canonical" href="https://kamiertop.github.io/posts/904687d/" /><link rel="prev" href="https://kamiertop.github.io/posts/19d1fbf/" /><link rel="stylesheet" href="/css/style.min.css"><link rel="preload" href="/lib/fontawesome-free/all.min.css" as="style" onload="this.removeAttribute('onload');this.rel='stylesheet'">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="canonical" href="https://kamiertop.github.io/posts/904687d/" /><link rel="prev" href="https://kamiertop.github.io/posts/19d1fbf/" /><link rel="next" href="https://kamiertop.github.io/source/golang/e38f64d/" /><link rel="stylesheet" href="/css/style.min.css"><link rel="preload" href="/lib/fontawesome-free/all.min.css" as="style" onload="this.removeAttribute('onload');this.rel='stylesheet'">
     <noscript><link rel="stylesheet" href="/lib/fontawesome-free/all.min.css"></noscript><link rel="preload" href="/lib/animate/animate.min.css" as="style" onload="this.removeAttribute('onload');this.rel='stylesheet'">
     <noscript><link rel="stylesheet" href="/lib/animate/animate.min.css"></noscript><script type="application/ld+json">
   {
@@ -42,7 +45,7 @@
       "name": ""},"author": {
         "@type": "Person",
         "name": "XiaoLiang"
-      },"description": ""
+      },"description": "Golang在工程实践中的错误处理 -- 石墨文档产研负责人[彭友顺]"
   }
   </script></head>
   <body data-header-desktop="sticky" data-header-mobile="auto"><script>(window.localStorage?.getItem('theme') ? localStorage.getItem('theme') === 'dark' : ('auto' === 'auto' ? window.matchMedia('(prefers-color-scheme: dark)').matches : 'auto' === 'dark')) && document.body.setAttribute('data-theme', 'dark');</script><div class="wrapper" data-page-style="normal"><header class="desktop animate__faster" id="header-desktop">
@@ -62,7 +65,24 @@
                 href="/categories/"
                 
                 
-              ><i class="fa-solid fa-folder-tree  fa-fw fa-sm" aria-hidden="true"></i> 分类</a></li><li class="menu-item">
+              ><i class="fa-solid fa-folder-tree  fa-fw fa-sm" aria-hidden="true"></i> 分类</a></li><li class="menu-item has-children">
+              <a
+                class="menu-link"
+                href="/source/"
+                
+                
+              >源码学习</a><i class="dropdown-icon fa-solid fa-chevron-down" aria-hidden="true"></i>
+                <ul class="sub-menu">
+                  <li
+                        class="menu-item"
+                      >
+                        <a
+                          class="menu-link"
+                          href="/source/golang"
+                          
+                          
+                        >golang</a>
+                      </li></ul></li><li class="menu-item">
               <a
                 class="menu-link"
                 href="/friends/"
@@ -131,6 +151,27 @@
                   
                   
                 ><i class="fa-solid fa-folder-tree  fa-fw fa-sm" aria-hidden="true"></i> 分类</a></li><li
+              class="menu-item"
+            ><span class="nested-item">
+                  <a
+                    class="menu-link"
+                    href="/source/"
+                    
+                    
+                  >源码学习</a>
+                  <i class="dropdown-icon fa-solid fa-chevron-right" aria-hidden="true"></i>
+                </span>
+                <ul class="sub-menu">
+                  <li
+                        class="menu-item"
+                      >
+                        <a
+                          class="menu-link"
+                          href="/source/golang"
+                          
+                          
+                        >golang</a>
+                      </li></ul></li><li
               class="menu-item"
             ><a
                   class="menu-link"
