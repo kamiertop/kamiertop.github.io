@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+  <head>
+    
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+    <meta name="robots" content="noodp" />
+    <title>Golang在工程实践中的错误处理 - KamiertopのBlogSite</title><meta name="author" content="XiaoLiang">
+<meta name="author-link" content="">
+<meta name="description" content="Golang在工程实践中的错误处理 -- 石墨文档产研负责人[彭友顺]" />
+  <meta itemprop="name" content="Golang在工程实践中的错误处理">
+  <meta itemprop="description" content="Golang在工程实践中的错误处理 -- 石墨文档产研负责人[彭友顺]">
+  <meta itemprop="datePublished" content="2024-06-18T22:20:25+08:00">
+  <meta itemprop="dateModified" content="2024-06-18T22:20:25+08:00">
+  <meta itemprop="wordCount" content="1040"><meta property="og:url" content="https://kamiertop.github.io/golang%E5%9C%A8%E5%B7%A5%E7%A8%8B%E5%AE%9E%E8%B7%B5%E4%B8%AD%E7%9A%84%E9%94%99%E8%AF%AF%E5%A4%84%E7%90%86/">
+  <meta property="og:site_name" content="KamiertopのBlogSite">
+  <meta property="og:title" content="Golang在工程实践中的错误处理">
+  <meta property="og:description" content="Golang在工程实践中的错误处理 -- 石墨文档产研负责人[彭友顺]">
+  <meta property="og:locale" content="zh_CN">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="posts">
+    <meta property="article:published_time" content="2024-06-18T22:20:25+08:00">
+    <meta property="article:modified_time" content="2024-06-18T22:20:25+08:00">
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Golang在工程实践中的错误处理">
+  <meta name="twitter:description" content="Golang在工程实践中的错误处理 -- 石墨文档产研负责人[彭友顺]">
+<meta name="application-name" content="FixIt">
+<meta name="apple-mobile-web-app-title" content="FixIt"><meta name="theme-color" data-light="#f8f8f8" data-dark="#252627" content="#f8f8f8"><meta name="msapplication-TileColor" content="#da532c"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="canonical" href="https://kamiertop.github.io/golang%E5%9C%A8%E5%B7%A5%E7%A8%8B%E5%AE%9E%E8%B7%B5%E4%B8%AD%E7%9A%84%E9%94%99%E8%AF%AF%E5%A4%84%E7%90%86/" /><link rel="prev" href="https://kamiertop.github.io/windows10-vmware17-%E5%AE%89%E8%A3%85centos-9-stream-%E5%BC%95%E5%AF%BC%E7%95%8C%E9%9D%A2%E5%8D%A1%E9%A1%BF/" /><link rel="stylesheet" href="/css/style.min.css"><link rel="preload" href="/lib/fontawesome-free/all.min.css" as="style" onload="this.removeAttribute('onload');this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="/lib/fontawesome-free/all.min.css"></noscript><link rel="preload" href="/lib/animate/animate.min.css" as="style" onload="this.removeAttribute('onload');this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="/lib/animate/animate.min.css"></noscript><script type="application/ld+json">
+  {
+    "@context": "http://schema.org",
+    "@type": "BlogPosting",
+    "headline": "Golang在工程实践中的错误处理",
+    "inLanguage": "zh-CN",
+    "mainEntityOfPage": {
+      "@type": "WebPage",
+      "@id": "https:\/\/kamiertop.github.io\/golang%E5%9C%A8%E5%B7%A5%E7%A8%8B%E5%AE%9E%E8%B7%B5%E4%B8%AD%E7%9A%84%E9%94%99%E8%AF%AF%E5%A4%84%E7%90%86\/"
+    },"genre": "posts","wordcount":  1040 ,
+    "url": "https:\/\/kamiertop.github.io\/golang%E5%9C%A8%E5%B7%A5%E7%A8%8B%E5%AE%9E%E8%B7%B5%E4%B8%AD%E7%9A%84%E9%94%99%E8%AF%AF%E5%A4%84%E7%90%86\/","datePublished": "2024-06-18T22:20:25+08:00","dateModified": "2024-06-18T22:20:25+08:00","publisher": {
+      "@type": "Organization",
+      "name": ""},"author": {
+        "@type": "Person",
+        "name": "XiaoLiang"
+      },"description": "Golang在工程实践中的错误处理 -- 石墨文档产研负责人[彭友顺]"
+  }
+  </script></head>
+  <body data-header-desktop="sticky" data-header-mobile="auto"><script>(window.localStorage?.getItem('theme') ? localStorage.getItem('theme') === 'dark' : ('auto' === 'auto' ? window.matchMedia('(prefers-color-scheme: dark)').matches : 'auto' === 'dark')) && document.body.setAttribute('data-theme', 'dark');</script><div class="wrapper" data-page-style="normal"><header class="desktop animate__faster" id="header-desktop">
+  <div class="header-wrapper" data-github-corner="right">
+    <div class="header-title">
+      <a href="/" title="KamiertopのBlogSite"><span class="header-title-text">KamiertopのBlogSite</span></a><span class="header-subtitle"></span></div>
+    <nav>
+      <ul class="menu"><li class="menu-item">
+              <a
+                class="menu-link"
+                href="/posts/"
+                
+                
+              ><i class="fa-solid fa-archive fa-fw fa-sm" aria-hidden="true"></i> 文章</a></li><li class="menu-item">
+              <a
+                class="menu-link"
+                href="/categories/"
+                
+                
+              ><i class="fa-solid fa-folder-tree  fa-fw fa-sm" aria-hidden="true"></i> 分类</a></li><li class="menu-item">
+              <a
+                class="menu-link"
+                href="/tags/"
+                
+                
+              ><i class="fa-solid fa-tags fa-fw fa-sm fa-fw fa-sm" aria-hidden="true"></i> 标签</a></li><li class="menu-item">
+              <a
+                class="menu-link"
+                href="/friends/"
+                
+                
+              ><i class="fa-solid fa-users-viewfinder fa-fw fa-sm fa-fw fa-sm" aria-hidden="true"></i> 友链</a></li><li class="menu-item">
+              <a
+                class="menu-link"
+                href="/about/"
+                
+                
+              ><i class="fa-regular fa-id-card fa-fw fa-sm fa-fw fa-sm" aria-hidden="true"></i> 关于</a></li><li class="menu-item delimiter"></li><li class="menu-item search" id="search-desktop">
+            <input type="text" placeholder="搜索文章标题或内容……" id="search-input-desktop">
+            <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-desktop" title="搜索">
+              <i class="fa-solid fa-search fa-fw" aria-hidden="true"></i>
+            </a>
+            <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-desktop" title="清空">
+              <i class="fa-solid fa-times-circle fa-fw" aria-hidden="true"></i>
+            </a>
+            <span class="search-button search-loading" id="search-loading-desktop">
+              <i class="fa-solid fa-spinner fa-fw fa-spin" aria-hidden="true"></i>
+            </span>
+          </li><li class="menu-item theme-switch" title="切换主题">
+          <i class="fa-solid fa-adjust fa-fw" aria-hidden="true"></i>
+        </li></ul>
+    </nav>
+  </div>
+</header><header class="mobile animate__faster" id="header-mobile">
+  <div class="header-container">
+    <div class="header-wrapper">
+      <div class="header-title">
+        <a href="/" title="KamiertopのBlogSite"><span class="header-title-text">KamiertopのBlogSite</span></a><span class="header-subtitle"></span></div>
+      <div class="menu-toggle" id="menu-toggle-mobile">
+        <span></span><span></span><span></span>
+      </div>
+    </div>
+    <nav>
+      <ul class="menu" id="menu-mobile"><li class="search-wrapper">
+            <div class="search mobile" id="search-mobile">
+              <input type="text" placeholder="搜索文章标题或内容……" id="search-input-mobile">
+              <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-mobile" title="搜索">
+                <i class="fa-solid fa-search fa-fw" aria-hidden="true"></i>
+              </a>
+              <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-mobile" title="清空">
+                <i class="fa-solid fa-times-circle fa-fw" aria-hidden="true"></i>
+              </a>
+              <span class="search-button search-loading" id="search-loading-mobile">
+                <i class="fa-solid fa-spinner fa-fw fa-spin" aria-hidden="true"></i>
+              </span>
+            </div>
+            <a href="javascript:void(0);" class="search-cancel" id="search-cancel-mobile">
+              取消
+            </a>
+          </li><li
+              class="menu-item"
+            ><a
+                  class="menu-link"
+                  href="/posts/"
+                  
+                  
+                ><i class="fa-solid fa-archive fa-fw fa-sm" aria-hidden="true"></i> 文章</a></li><li
+              class="menu-item"
+            ><a
+                  class="menu-link"
+                  href="/categories/"
+                  
+                  
+                ><i class="fa-solid fa-folder-tree  fa-fw fa-sm" aria-hidden="true"></i> 分类</a></li><li
+              class="menu-item"
+            ><a
+                  class="menu-link"
+                  href="/tags/"
+                  
+                  
+                ><i class="fa-solid fa-tags fa-fw fa-sm fa-fw fa-sm" aria-hidden="true"></i> 标签</a></li><li
+              class="menu-item"
+            ><a
+                  class="menu-link"
+                  href="/friends/"
+                  
+                  
+                ><i class="fa-solid fa-users-viewfinder fa-fw fa-sm fa-fw fa-sm" aria-hidden="true"></i> 友链</a></li><li
+              class="menu-item"
+            ><a
+                  class="menu-link"
+                  href="/about/"
+                  
+                  
+                ><i class="fa-regular fa-id-card fa-fw fa-sm fa-fw fa-sm" aria-hidden="true"></i> 关于</a></li><li class="menu-item menu-system">
+          <span class="menu-system-item theme-switch" title="切换主题"><i class="fa-solid fa-adjust fa-fw" aria-hidden="true"></i></span></li>
+      </ul>
+    </nav>
+  </div>
+</header><div class="search-dropdown desktop">
+    <div id="search-dropdown-desktop"></div>
+  </div>
+  <div class="search-dropdown mobile">
+    <div id="search-dropdown-mobile"></div>
+  </div><main class="container"><aside class="aside-collection animate__animated animate__fadeIn animate__faster" aria-label="合集"></aside>
+
+  <article class="page single">
+    <div class="header"><h1 class="single-title animate__animated animate__flipInX"><span>Golang在工程实践中的错误处理</span>
+      </h1></div><div class="post-meta">
+      <div class="post-meta-line"><span class="post-author"><span class="author"><img loading="lazy" src="/avatar.png" alt="XiaoLiang" data-title="XiaoLiang" width="20" height="20" class="avatar" style="background: url(/images/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}"/>&nbsp;XiaoLiang</span></span></div><div class="post-meta-line"><span title="发布于 2024-06-18 22:20:25"><i class="fa-solid fa-calendar-days fa-fw me-1" aria-hidden="true"></i><time datetime="2024-06-18">2024-06-18</time></span>&nbsp;<span title="1040 字"><i class="fa-solid fa-pencil-alt fa-fw me-1" aria-hidden="true"></i>约 1100 字</span>&nbsp;<span><i class="fa-regular fa-clock fa-fw me-1" aria-hidden="true"></i>预计阅读 3 分钟</span>&nbsp;</div>
+    </div><div class="details toc" id="toc-static" data-kept="false">
+        <div class="details-summary toc-title">
+          <span>目录</span>
+          <span><i class="details-icon fa-solid fa-angle-right" aria-hidden="true"></i></span>
+        </div>
+        <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
+  <ul>
+    <li><a href="#错误处理为什么慢">错误处理为什么慢</a></li>
+    <li><a href="#如何完善错误信息">如何完善错误信息</a>
+      <ul>
+        <li><a href="#为何调试慢----错误信息少">为何调试慢 &ndash; 错误信息少</a></li>
+        <li><a href="#如何解决">如何解决</a></li>
+      </ul>
+    </li>
+    <li><a href="#优雅处理错误信息">优雅处理错误信息</a></li>
+    <li><a href="#分布式错误处理">分布式错误处理</a></li>
+    <li><a href="#为什么恢复慢">为什么恢复慢</a></li>
+    <li><a href="#相关链接">相关链接</a></li>
+  </ul>
+</nav></div>
+      </div><div class="content" id="content"><div class="details admonition tip open">
+    <div class="details-summary admonition-title">
+      <i class="icon fa-solid fa-lightbulb fa-fw" aria-hidden="true"></i>来源<i class="details-icon fa-solid fa-angle-right fa-fw" aria-hidden="true"></i>
+    </div>
+    <div class="details-content">
+      <div class="admonition-content"><ul>
+<li>本文来自于: Golang在工程实践中的错误处理 &ndash; 石墨文档产研负责人[彭友顺]</li>
+<li>我仅用来学习, PPT是群里一个群友发的</li>
+</ul>
+</div>
+    </div>
+  </div>
+<h2 id="错误处理为什么慢" class="heading-element"><span>错误处理为什么慢</span>
+  <a href="#%e9%94%99%e8%af%af%e5%a4%84%e7%90%86%e4%b8%ba%e4%bb%80%e4%b9%88%e6%85%a2" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h2><ul>
+<li>错误信息不够完善</li>
+<li>错误处理不够优雅</li>
+<li>分布式错误难以串联</li>
+<li>错误信息难以识别</li>
+</ul>
+<h2 id="如何完善错误信息" class="heading-element"><span>如何完善错误信息</span>
+  <a href="#%e5%a6%82%e4%bd%95%e5%ae%8c%e5%96%84%e9%94%99%e8%af%af%e4%bf%a1%e6%81%af" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h2><h3 id="为何调试慢----错误信息少" class="heading-element"><span>为何调试慢 &ndash; 错误信息少</span>
+  <a href="#%e4%b8%ba%e4%bd%95%e8%b0%83%e8%af%95%e6%85%a2----%e9%94%99%e8%af%af%e4%bf%a1%e6%81%af%e5%b0%91" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h3><ul>
+<li>错误信息少, 每遇到一个问题, 就追加一个日志字段, 排查错误效率非常低</li>
+<li>以一个grpc错误日志param error为例, 不知道哪个client, 哪一行代码, 哪一方的参数问题</li>
+</ul>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-json" data-lang="json"><span class="line"><span class="cl"><span class="p">{</span><span class="nt">&#34;lv&#34;</span><span class="p">:</span> <span class="s2">&#34;error&#34;</span><span class="p">,</span> <span class="nt">&#34;ts&#34;</span><span class="p">:</span> <span class="mi">1711111870</span><span class="p">,</span> <span class="nt">&#34;msg&#34;</span><span class="p">:</span> <span class="s2">&#34;grpc error&#34;</span><span class="p">,</span> <span class="nt">&#34;error&#34;</span><span class="p">:</span> <span class="s2">&#34;param error&#34;</span><span class="p">}</span></span></span></code></pre></div><h3 id="如何解决" class="heading-element"><span>如何解决</span>
+  <a href="#%e5%a6%82%e4%bd%95%e8%a7%a3%e5%86%b3" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h3><ul>
+<li>完善错误信息
+<ul>
+<li>对端信息: 能够确定对端的唯一来源, 例如应用名称, 对端的配置, 对端的ip等</li>
+<li>请求方法: 对端请求的方法</li>
+<li>请求参数: 请求的参数信息, 包括header里的metadata</li>
+<li>响应数据: 响应的数据, 包括header里的metadata</li>
+<li>状态信息: 错误码和错误信息</li>
+<li>耗时时间: 请求到响应的耗时时间</li>
+<li>执行行号: 调用处执行的行号</li>
+</ul>
+</li>
+<li>高亮信息
+<ul>
+<li>调试阶段, 日志用红色高亮错误</li>
+<li>肉眼才能组快的定位到error日志</li>
+<li>利用现代IDE, 直接点开代码执行行号, 跳转到指定的代码位置</li>
+</ul>
+</li>
+<li>组件封装
+<ul>
+<li>框架错误处理信息</li>
+<li>脏活累活交给框架</li>
+<li>组件要全面统一</li>
+</ul>
+</li>
+</ul>
+<h2 id="优雅处理错误信息" class="heading-element"><span>优雅处理错误信息</span>
+  <a href="#%e4%bc%98%e9%9b%85%e5%a4%84%e7%90%86%e9%94%99%e8%af%af%e4%bf%a1%e6%81%af" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h2><ul>
+<li>记录一次错误
+<ul>
+<li>对于一个同样的错误, 杂音非常多</li>
+<li>每个err, 都去查看一次对应代码, 效率非常低</li>
+<li>过多记录会占用存储空间</li>
+<li>应该在最外层入口处只记录一次错误空间</li>
+</ul>
+</li>
+<li>不要透传错误
+<ul>
+<li>使用fmt.Errorf()</li>
+<li>如果不考虑性能
+<ul>
+<li>日志开启stack</li>
+<li>错误追加stack</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>错误码唯一性
+<ul>
+<li>对于一个错误, 可能有多个原因, 仍需查看代码以确定具体情况</li>
+<li>错误码唯一性, 准确地反映出错误的根本原因, 才能快速定位问题</li>
+<li>如果不在写代码的时候花时间做唯一错误码, 那么只能在排查的时候花更多时间查问题</li>
+</ul>
+</li>
+</ul>
+<h2 id="分布式错误处理" class="heading-element"><span>分布式错误处理</span>
+  <a href="#%e5%88%86%e5%b8%83%e5%bc%8f%e9%94%99%e8%af%af%e5%a4%84%e7%90%86" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h2><ul>
+<li>分布式信息
+<ul>
+<li>调用链复杂, 服务A的问题, 可能是其他B,C等服务引起的</li>
+</ul>
+</li>
+<li>错误尽早失败
+<ul>
+<li>核心错误, 应该直接让系统panic</li>
+<li>必要的错误信息, 判断在哪个地方报错, 哪个微服务有问题</li>
+<li>错误信息高亮, 显示红色让错误更明显</li>
+<li>核心错误中断系统启动, 让错误显示在最后一行</li>
+<li>不让报错传递到别的服务</li>
+</ul>
+</li>
+<li>使用TraceId串联服务</li>
+</ul>
+<h2 id="为什么恢复慢" class="heading-element"><span>为什么恢复慢</span>
+  <a href="#%e4%b8%ba%e4%bb%80%e4%b9%88%e6%81%a2%e5%a4%8d%e6%85%a2" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h2><ul>
+<li>经验: 为什么年纪大的程序员会比年轻程序员排查问题更快
+<ul>
+<li>遇到的问题多</li>
+<li>这些问题不会系统的出现在课本上</li>
+<li>没遇到过的问题, 很难意识到对应的操作手段</li>
+</ul>
+</li>
+<li>识别
+<ul>
+<li>将认知总结为文档</li>
+<li>故障演练</li>
+</ul>
+</li>
+<li>自动化
+<ul>
+<li>自己写文档, 代码和文档不一致</li>
+<li>有错误码找不到代码对应地方</li>
+<li>有错误不知道是哪个版本的代码</li>
+<li>错误码在代码中还有没有使用, 错误码越变越多</li>
+<li>错误码孵化, 没用的错误码应该随版本下线</li>
+<li>错误码的SOP, 国际化问题</li>
+</ul>
+</li>
+</ul>
+<h2 id="相关链接" class="heading-element"><span>相关链接</span>
+  <a href="#%e7%9b%b8%e5%85%b3%e9%93%be%e6%8e%a5" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h2><ul>
+<li><a href="https://github.com/gotomicro/ego"target="_blank" rel="external nofollow noopener noreferrer">https://github.com/gotomicro/ego</a></li>
+<li><a href="https://github.com/ego-component"target="_blank" rel="external nofollow noopener noreferrer">https://github.com/ego-component</a></li>
+<li><a href="https://mp.weixin.qq.com/s/xXGjlSYOmY_uz6ZsbLSIEw"target="_blank" rel="external nofollow noopener noreferrer">https://mp.weixin.qq.com/s/xXGjlSYOmY_uz6ZsbLSIEw</a></li>
+<li><a href="https://github.com/clickvisual/clickvisual"target="_blank" rel="external nofollow noopener noreferrer">https://github.com/clickvisual/clickvisual</a></li>
+</ul></div><div class="post-footer" id="post-footer">
+  <div class="post-info">
+    <div class="post-info-line">
+      <div class="post-info-mod">
+        <span title="更新于 2024-06-18 22:20:25">更新于 2024-06-18&nbsp;</span>
+      </div></div><div class="post-info-line">
+        <div class="post-info-md"></div>
+        <div class="post-info-share">
+          <span></span>
+        </div>
+      </div></div>
+
+  <div class="post-info-more">
+    <section class="post-tags"></section>
+    <section>
+      <span><a href="javascript:void(0);" onclick="window.history.back();">返回</a></span>&nbsp;|&nbsp;<span><a href="/">主页</a></span>
+    </section>
+  </div>
+
+  <div class="post-nav"><a href="/windows10-vmware17-%E5%AE%89%E8%A3%85centos-9-stream-%E5%BC%95%E5%AF%BC%E7%95%8C%E9%9D%A2%E5%8D%A1%E9%A1%BF/" class="post-nav-item" rel="prev" title="Windows10 Vmware17 安装Centos-9-stream 引导界面卡顿"><i class="fa-solid fa-angle-left fa-fw" aria-hidden="true"></i>Windows10 Vmware17 安装Centos-9-stream 引导界面卡顿</a></div>
+</div>
+<div id="comments"><div id="gitalk" class="comment"></div><noscript>
+        Please enable JavaScript to view the comments powered by <a href="https://github.com/gitalk/gitalk" rel="external nofollow noopener noreferrer">Gitalk</a>.
+      </noscript></div></article>
+
+  <aside class="toc" id="toc-auto" aria-label="目录"><h2 class="toc-title">目录&nbsp;<i class="toc-icon fa-solid fa-angle-down fa-fw" aria-hidden="true"></i></h2>
+      <div class="toc-content" id="toc-content-auto"></div></aside></main><footer class="footer">
+    <div class="footer-container"><div class="footer-line powered">由 <a href="https://gohugo.io/" target="_blank" rel="external nofollow noopener noreferrer" title="Hugo 0.127.0"><img class="hugo-icon" src="/images/hugo.min.svg" alt="Hugo logo" /> Hugo</a> 强力驱动 | 主题 - <a href="https://github.com/hugo-fixit/FixIt" target="_blank" rel="external" title="FixIt v0.3.8-RC"><img class="fixit-icon" src="/images/fixit.min.svg" alt="FixIt logo" /> FixIt</a>
+        </div><div class="footer-line copyright" itemscope itemtype="http://schema.org/CreativeWork"><i class="fa-regular fa-copyright fa-fw" aria-hidden="true"></i>
+            <span itemprop="copyrightYear">2021 - 2024</span><span class="author" itemprop="copyrightHolder">
+              <a href="/">XiaoLiang</a></span><span class="license footer-divider"><a rel="license external nofollow noopener noreferrer" href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a></span></div></div>
+  </footer></div><div class="widgets"><div class="fixed-buttons animate__faster d-none"><div class="fixed-button back-to-top" role="button" aria-label="回到顶部"><i class="fa-solid fa-arrow-up fa-fw" aria-hidden="true"></i><span class="variant-numeric d-none">0%</span>
+        </div><div class="fixed-button view-comments d-none" role="button" aria-label="查看评论"><i class="fa-solid fa-comment fa-fw" aria-hidden="true"></i></div></div><a href="https://github.com/kamiertop" title="在 GitHub 上查看源代码"target="_blank" rel="external nofollow" class="github-corner right d-none-mobile"><svg viewBox="0 0 250 250" aria-hidden="true" width="56" height="56"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a><div id="mask"></div><div class="reading-progress-bar" style="left: 0;top: 0;"></div><noscript>
+    <div class="noscript-warning">该网站在启用 JavaScript 的情况下效果最佳。</div>
+  </noscript>
+</div><link rel="stylesheet" href="/lib/gitalk/gitalk.min.css"><script src="/lib/gitalk/gitalk.min.js"></script><script src="/lib/autocomplete/autocomplete.min.js" defer></script><script src="/lib/fuse/fuse.min.js" defer></script><script src="/lib/twemoji/twemoji.min.js" defer></script><script>window.config={"code":{"copyTitle":"复制到剪贴板","maxShownLines":10},"comment":{"enable":true,"expired":false,"gitalk":{"admin":["kamiertop"],"clientID":"Ov23li6dlTwKjw2TT9OK","clientSecret":"f65d8cad4b726c1fd56b92329d78d09e604428d8","id":"2024-06-18T22:20:25+08:00","owner":"kamiertop","repo":"kamiertop.github.io","title":"Golang在工程实践中的错误处理"}},"search":{"distance":100,"findAllMatches":false,"fuseIndexURL":"/index.json","highlightTag":"em","ignoreFieldNorm":false,"ignoreLocation":false,"isCaseSensitive":false,"location":0,"maxResultLength":10,"minMatchCharLength":2,"noResultsFound":"没有找到结果","snippetLength":30,"threshold":0.3,"type":"fuse","useExtendedSearch":false},"twemoji":true,"version":"v0.3.8-RC"};</script><script src="/js/theme.min.js" defer></script></body>
+</html>
