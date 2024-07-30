@@ -1,0 +1,55 @@
+<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0">
+  <channel>
+    <title>所有文章 - KamiertopのBlogSite</title>
+    <link>https://kamiertop.github.io/posts/</link>
+    <description>所有文章 | KamiertopのBlogSite</description>
+    <generator>Hugo -- gohugo.io</generator><language>zh-CN</language><lastBuildDate>Tue, 30 Jul 2024 18:43:07 &#43;0800</lastBuildDate><atom:link href="https://kamiertop.github.io/posts/" rel="self" type="application/rss+xml" /><item>
+  <title>Golang1.20及以后版本编译标准库为静态库文件</title>
+  <link>https://kamiertop.github.io/golang1.20%E5%8F%8A%E4%BB%A5%E5%90%8E%E7%89%88%E6%9C%AC%E7%BC%96%E8%AF%91%E6%A0%87%E5%87%86%E5%BA%93%E4%B8%BA%E9%9D%99%E6%80%81%E5%BA%93%E6%96%87%E4%BB%B6/</link>
+  <pubDate>Tue, 30 Jul 2024 18:43:07 &#43;0800</pubDate>
+  <author>XiaoLiang</author>
+  <guid>https://kamiertop.github.io/golang1.20%E5%8F%8A%E4%BB%A5%E5%90%8E%E7%89%88%E6%9C%AC%E7%BC%96%E8%AF%91%E6%A0%87%E5%87%86%E5%BA%93%E4%B8%BA%E9%9D%99%E6%80%81%E5%BA%93%E6%96%87%E4%BB%B6/</guid>
+  <description><![CDATA[Go1.20以后版本编译标准库方便`go tool compile -S xx.go`调用]]></description>
+</item>
+<item>
+  <title>Golang在工程实践中的错误处理</title>
+  <link>https://kamiertop.github.io/golang%E5%9C%A8%E5%B7%A5%E7%A8%8B%E5%AE%9E%E8%B7%B5%E4%B8%AD%E7%9A%84%E9%94%99%E8%AF%AF%E5%A4%84%E7%90%86/</link>
+  <pubDate>Tue, 18 Jun 2024 22:20:25 &#43;0800</pubDate>
+  <author>XiaoLiang</author>
+  <guid>https://kamiertop.github.io/golang%E5%9C%A8%E5%B7%A5%E7%A8%8B%E5%AE%9E%E8%B7%B5%E4%B8%AD%E7%9A%84%E9%94%99%E8%AF%AF%E5%A4%84%E7%90%86/</guid>
+  <description><![CDATA[Golang在工程实践中的错误处理 -- 石墨文档产研负责人[彭友顺]]]></description>
+</item>
+<item>
+  <title>Windows10 Vmware17 安装Centos-9-stream 引导界面卡顿</title>
+  <link>https://kamiertop.github.io/windows10-vmware17-%E5%AE%89%E8%A3%85centos-9-stream-%E5%BC%95%E5%AF%BC%E7%95%8C%E9%9D%A2%E5%8D%A1%E9%A1%BF/</link>
+  <pubDate>Sun, 16 Jun 2024 14:32:10 &#43;0800</pubDate>
+  <author>XiaoLiang</author>
+  <guid>https://kamiertop.github.io/windows10-vmware17-%E5%AE%89%E8%A3%85centos-9-stream-%E5%BC%95%E5%AF%BC%E7%95%8C%E9%9D%A2%E5%8D%A1%E9%A1%BF/</guid>
+  <description><![CDATA[Windows10 Vmware17 安装Centos-9-stream 引导界面卡顿.]]></description>
+</item>
+<item>
+  <title>Win10 Rust FFI</title>
+  <link>https://kamiertop.github.io/win10-rust-ffi/</link>
+  <pubDate>Fri, 07 Jun 2024 17:29:16 &#43;0800</pubDate>
+  <author>XiaoLiang</author>
+  <guid>https://kamiertop.github.io/win10-rust-ffi/</guid>
+  <description><![CDATA[]]></description>
+</item>
+<item>
+  <title>K8s V1.29集群搭建-避坑指南</title>
+  <link>https://kamiertop.github.io/k8s-v1.29%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA-%E9%81%BF%E5%9D%91%E6%8C%87%E5%8D%97/</link>
+  <pubDate>Wed, 13 Mar 2024 00:22:17 &#43;0800</pubDate>
+  <author>XiaoLiang</author>
+  <guid>https://kamiertop.github.io/k8s-v1.29%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA-%E9%81%BF%E5%9D%91%E6%8C%87%E5%8D%97/</guid>
+  <description><![CDATA[在国内搭建起k8s集群属实不易, 全是泪]]></description>
+</item>
+<item>
+  <title>BuildSite</title>
+  <link>https://kamiertop.github.io/buildsite/</link>
+  <pubDate>Wed, 31 Jan 2024 21:41:07 &#43;0800</pubDate>
+  <author>XiaoLiang</author>
+  <guid>https://kamiertop.github.io/buildsite/</guid>
+  <description><![CDATA[记录小站搭建]]></description>
+</item>
+</channel>
+</rss>
