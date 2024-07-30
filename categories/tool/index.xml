@@ -1,0 +1,15 @@
+<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0">
+  <channel>
+    <title>tool - 分类 - KamiertopのBlogSite</title>
+    <link>https://kamiertop.github.io/categories/tool/</link>
+    <description>tool - 分类 | KamiertopのBlogSite</description>
+    <generator>Hugo -- gohugo.io</generator><language>zh-CN</language><lastBuildDate>Sun, 16 Jun 2024 14:32:10 &#43;0800</lastBuildDate><atom:link href="https://kamiertop.github.io/categories/tool/" rel="self" type="application/rss+xml" /><item>
+  <title>Windows10 Vmware17 安装Centos-9-stream 引导界面卡顿</title>
+  <link>https://kamiertop.github.io/windows10-vmware17-%E5%AE%89%E8%A3%85centos-9-stream-%E5%BC%95%E5%AF%BC%E7%95%8C%E9%9D%A2%E5%8D%A1%E9%A1%BF/</link>
+  <pubDate>Sun, 16 Jun 2024 14:32:10 &#43;0800</pubDate>
+  <author>XiaoLiang</author>
+  <guid>https://kamiertop.github.io/windows10-vmware17-%E5%AE%89%E8%A3%85centos-9-stream-%E5%BC%95%E5%AF%BC%E7%95%8C%E9%9D%A2%E5%8D%A1%E9%A1%BF/</guid>
+  <description><![CDATA[Windows10 Vmware17 安装Centos-9-stream 引导界面卡顿.]]></description>
+</item>
+</channel>
+</rss>
