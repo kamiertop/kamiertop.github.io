@@ -1,0 +1,297 @@
+title = "KamiertopのBlogSite"
+baseURL = "https://www.kamier.top"
+defaultContentLanguage = "zh-cn"
+languageCode = "zh-CN"
+# 是否包括中日韩文字
+hasCJKLanguage = true
+dateFormat = "2006-01-02"
+titleCaseStyle = "none"
+
+# 更改使用 Hugo 构建网站时使用的默认主题
+theme = "FixIt"
+enableEmoji = true
+
+[permalinks]
+  [permalinks.page]
+    posts = '/:title'
+  [permalinks.section]
+    posts = '/posts'
+
+#[menu]
+#  [[menu.main]]
+#    identifier = ""
+#    #  父级菜单项的标识符 (identifier)
+#    parent = ""
+#    # 你可以在名称（允许 HTML 格式）之前添加其他信息，例如图标
+#    pre = ""
+#    # 你可以在名称（允许 HTML 格式）之后添加其他信息，例如图标
+#    post = ""
+#    name = ""
+#    url = ""
+#    # 当你将鼠标悬停在此菜单链接上时，将显示的标题
+#    title = ""
+#    weight = 1
+#    #  向菜单项添加用户定义的内容
+#    [menu.main.params]
+#      # 添加 CSS 类到菜单项
+#      class = ""
+#      # 是否为草稿菜单，类似草稿页面
+#      draft = false
+#      #  添加 fontawesome 图标到菜单项
+#      icon = ""
+#      #  设置菜单项类型，可选值：["mobile", "desktop"]
+#      type = ""
+#      #  是否显示子菜单项分割线
+#      divided = false
+[menu]
+  [[menu.main]]
+    identifier = "posts"
+    name = "文章"
+    url = "/posts/"
+    weight = 1
+    [menu.main.params]
+      icon = "fa-solid fa-archive"
+  [[menu.main]]
+    identifier = "categories"
+    name = "分类"
+    url = "/categories/"
+#    parent = "posts" 仅用来记录如何添加子文档
+    weight = 2
+    [menu.main.params]
+      icon = "fa-solid fa-folder-tree "
+  [[menu.main]]
+    identifier = "tags"
+    name = "标签"
+    url = "/tags/"
+    weight = 3
+    [menu.main.params]
+      icon = "fa-solid fa-tags fa-fw fa-sm"
+  [[menu.main]]
+    identifier = "friends"
+    name = "友链"
+    url = "/friends/"
+    weight = 50
+    [menu.main.params]
+      icon = "fa-solid fa-users-viewfinder fa-fw fa-sm"
+  [[menu.main]]
+    identifier = "about"
+    name = "关于"
+    url = "/about/"
+    weight = 100
+    [menu.main.params]
+      icon = "fa-regular fa-id-card fa-fw fa-sm"
+
+
+[markup]
+  # 语法高亮设置 (https://gohugo.io/content-management/syntax-highlighting)
+  [markup.highlight]
+    # false 是必要的设置 (https://github.com/hugo-fixit/FixIt/issues/43)
+    noClasses = false
+  [markup.goldmark.renderer]
+    unsafe = true
+[outputs]
+home = ["HTML", "JSON"]
+
+[params]
+  defaultTheme = "auto"
+  [params.author]
+    name = "kamiertop"
+    avatar = "/avatar.png"
+  [params.page]
+    authorAvatar = true
+    twemoji = true
+    fontawesome = true
+    linkToMarkdown = false
+    linkToSource = false
+    linkToEdit = false
+    linkToReport = false
+    license = ""
+    titleCaseStyle = "ap"
+    [params.page.code]
+      copy = true
+      edit = false
+      maxShownLines = 10
+    [params.page.share]
+      enable = false
+    [params.page.comment]
+      enable = true
+    [params.page.comment.gitalk]
+      enable = true
+      owner = "kamiertop"
+      admin = "kamiertop"
+      clientId = "Ov23li6dlTwKjw2TT9OK"
+      repo = "kamiertop.github.io"
+      clientSecret = "f65d8cad4b726c1fd56b92329d78d09e604428d8"
+    [params.page.comment.commento]
+      enable = false
+  [params.search]
+    enable = true
+    type = "fuse"
+    contentLength = 4000
+    # placeholder of the search bar
+    placeholder = ""
+    # max number of results length
+    maxResultLength = 10
+    # snippet length of the result
+    snippetLength = 30
+    # HTML tag name of the highlight part in results
+    highlightTag = "em"
+    # whether to use the absolute URL based on the baseURL in search index
+    absoluteURL = false
+  [params.search.fuse]
+    isCaseSensitive = false # 不区分大小写
+    minMatchCharLength = 2
+    findAllMatches = false
+    location = 0
+    threshold = 0.3
+    distance = 100
+    ignoreLocation = false
+    useExtendedSearch = false
+    ignoreFieldNorm = false
+  [params.home]
+    paginate = 10
+    [params.home.profile]
+        enable = true
+        avatarURL = "/avatar.png"
+        typeit = true
+        social = true
+        title = "欢迎各位看官"
+    [params.home.posts]
+        enable = true
+        paginate = 6
+  [params.social]
+    RSS = false
+    [params.social.github]
+      title = "Github"
+      id = "kamiertop"
+      prefix = "https://github.com"
+    [params.social.email]
+      title = "kamiertop@gmail.com"
+      id = "kamiertop@gmail.com"
+  [params.githubCorner]
+    enable = true
+    permalink = "https://github.com/kamiertop/kamiertop.github.io"
+    title = "在 GitHub 上查看源代码"
+    position = "right"
+  # 标签云
+  [params.tagcloud]
+    enable = true
+    min = 14
+    max = 32
+    peakCount = 10
+    orderby = "name"
+  [params.pace]
+      enable = true
+      color = "blue"
+      theme = "minimal"
+  [params.watermark]
+      enable = false
+      content = "kamiertop"
+      opacity = 0.1
+      width = 150
+      height = 20
+      rowSpacing = 60
+      colSpacing = 30
+      rotate = 15
+      fontSize = 0.85
+      fontFamily = "inherit"
+  [params.breadcrumb]
+    enable = true
+    sticky = false      # 是否固定面包屑导航
+    showHome = true     # 是否显示主页链接
+    separator = "/"
+    capitalize = false  # 是否大小面包屑导航
+  [params.footer]
+  enable = true
+  # FixIt 0.2.17 | 更改 自定义内容（支持 HTML 格式）
+  # 进阶使用，见参数 `params.customFilePath.footer`
+  custom = ""
+  # FixIt 0.2.0 | 新增 是否显示版权信息
+  copyright = true
+  # FixIt 0.2.0 | 新增 是否显示作者
+  author = true
+  # 网站创立年份
+  since = 2021
+  # FixIt 0.2.12 | 新增 公网安备信息，仅在中国使用（支持 HTML 格式）
+  gov = ""
+  # FixIt 0.2.12 | 更改 ICP 备案信息，仅在中国使用（支持 HTML 格式）
+  icp = ""
+  # 许可协议信息（支持 HTML 格式）
+  license = '<a rel="license external nofollow noopener noreferrer" href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a>'
+    [params.footer.powered]
+      enable = true
+      hugoLogo = true
+      themeLogo = true
+    [params.footer.siteTime]
+      enable = false
+      animate = true
+      icon = "fa-solid fa-heartbeat"
+      pre = ""
+      value = ""
+    [params.footer.order]
+      powered = 0
+      copyright = 0
+      statistics = 0
+      visitor = 0
+      beian = 0
+  [params.archives]
+      paginate = 20
+      dateFormat = "01-02"
+  [params.mermaid]
+    themes = ["default", "dark"]
+  [params.cookieconsent]
+    enable = false
+  [params.backToTop]
+    enable = true
+  [params.readingProgress]
+    enable = true
+    start = "left"
+    position = "top"
+    reversed = false
+    light = ""
+    dark = ""
+    height = "2px"
+  [params.list]
+      paginate = 20
+      dateFormat = "01-02"
+      [params.list.feed]
+        limit = -1
+        fullText = false
+  [params.analytics]
+    enable = true
+  # 最近更新文章设置
+  [params.recentlyUpdated]
+      archives = true
+      section = true
+      list = true
+      days = 30
+      maxCount = 10
+[outputFormats]
+# 用于输出 Markdown 格式文档的设置
+[outputFormats.MarkDown]
+  mediaType = "text/markdown"
+  isPlainText = true
+  isHTML = false
+# FixIt 0.3.0 | 新增 用于输出 /archives/index.html 文件的设置
+[outputFormats.archives]
+  path = "archives"
+  baseName = "index"
+  mediaType = "text/html"
+  isPlainText = false
+  isHTML = true
+  permalinkable = true
+# FixIt 0.3.0 | 新增 用于输出 /offline/index.html 文件的设置
+[outputFormats.offline]
+  path = "offline"
+  baseName = "index"
+  mediaType = "text/html"
+  isPlainText = false
+  isHTML = true
+  permalinkable = true
+# FixIt 0.3.0 | 新增 用于输出 readme.md 文件的设置
+[outputFormats.README]
+  baseName = "readme"
+  mediaType = "text/markdown"
+  isPlainText = true
+  isHTML = false
+
