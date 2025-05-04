@@ -107,6 +107,18 @@ home = ["HTML", "JSON"]
     linkToReport = false
     license = ""
     titleCaseStyle = "ap"
+    [params.page.math]
+      enable = true
+      # 默认行内定界符是 $ ... $ 和 \( ... \)
+      inlineLeftDelimiter = ""
+      inlineRightDelimiter = ""
+      # 默认块定界符是 $$ ... $$, \[ ... \],  \begin{equation} ... \end{equation} 和一些其它的函数
+      blockLeftDelimiter = ""
+      blockRightDelimiter = ""
+      # KaTeX 插件 copy_tex
+      copyTex = true
+      # KaTeX 插件 mhchem
+      mhchem = true
     [params.page.code]
       copy = true
       edit = false
@@ -115,15 +127,22 @@ home = ["HTML", "JSON"]
       enable = false
     [params.page.comment]
       enable = true
-    [params.page.comment.gitalk]
-      enable = true
-      owner = "kamiertop"
-      admin = "kamiertop"
-      clientId = "Ov23li6dlTwKjw2TT9OK"
-      repo = "kamiertop.github.io"
-      clientSecret = "f65d8cad4b726c1fd56b92329d78d09e604428d8"
+#    [params.page.comment.gitalk]
+#      enable = true
+#      owner = "kamiertop"
+#      admin = "kamiertop"
+#      clientId = "Ov23li6dlTwKjw2TT9OK"
+#      repo = "kamiertop.github.io"
+#      clientSecret = "f65d8cad4b726c1fd56b92329d78d09e604428d8"
     [params.page.comment.commento]
-      enable = false
+      enable = true
+    [params.page.comment.utterances]
+      enable = true
+      repo = "kamiertop/kamiertop.github.io"
+      lightTheme = "github-light"
+      darkTheme = "github-dark"
+      issueTerm = "pathname"
+      label = ""
   [params.search]
     enable = true
     type = "fuse"
