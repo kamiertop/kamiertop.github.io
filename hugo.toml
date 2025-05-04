@@ -135,7 +135,7 @@ home = ["HTML", "JSON"]
 #      repo = "kamiertop.github.io"
 #      clientSecret = "f65d8cad4b726c1fd56b92329d78d09e604428d8"
     [params.page.comment.commento]
-      enable = true
+      enable = false
     [params.page.comment.utterances]
       enable = true
       repo = "kamiertop/kamiertop.github.io"
