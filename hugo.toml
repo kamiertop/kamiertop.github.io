@@ -6,7 +6,6 @@ languageCode = "zh-CN"
 hasCJKLanguage = true
 dateFormat = "2006-01-02"
 titleCaseStyle = "none"
-
 # 更改使用 Hugo 构建网站时使用的默认主题
 theme = "FixIt"
 enableEmoji = true
@@ -94,6 +93,7 @@ home = ["HTML", "JSON"]
 
 [params]
   defaultTheme = "auto"
+
   [params.author]
     name = "kamiertop"
     avatar = "/avatar.png"
