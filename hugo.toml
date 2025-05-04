@@ -11,10 +11,7 @@ theme = "FixIt"
 enableEmoji = true
 
 [permalinks]
-  [permalinks.page]
-    posts = '/:title'
-  [permalinks.section]
-    posts = '/posts'
+posts = "/posts/:title/"
 
 #[menu]
 #  [[menu.main]]
@@ -88,8 +85,7 @@ enableEmoji = true
     noClasses = false
   [markup.goldmark.renderer]
     unsafe = true
-[outputs]
-home = ["HTML", "JSON"]
+
 
 [params]
   defaultTheme = "auto"
@@ -168,7 +164,6 @@ home = ["HTML", "JSON"]
     useExtendedSearch = false
     ignoreFieldNorm = false
   [params.home]
-    paginate = 10
     [params.home.profile]
         enable = true
         avatarURL = "/avatar.png"
@@ -177,7 +172,7 @@ home = ["HTML", "JSON"]
         title = "欢迎各位看官"
     [params.home.posts]
         enable = true
-        paginate = 6
+        paginate = 10
   [params.social]
     RSS = false
     [params.social.github]
@@ -285,6 +280,9 @@ home = ["HTML", "JSON"]
       list = true
       days = 30
       maxCount = 10
+
+[outputs]
+home = ["HTML", "JSON"]
 [outputFormats]
 # 用于输出 Markdown 格式文档的设置
 [outputFormats.MarkDown]
