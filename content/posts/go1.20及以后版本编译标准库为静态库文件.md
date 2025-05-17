@@ -13,6 +13,8 @@ description:
 toc: true
 math: false
 lightgallery: false
+categories:
+  - Go
 ---
 
 <!--more-->
