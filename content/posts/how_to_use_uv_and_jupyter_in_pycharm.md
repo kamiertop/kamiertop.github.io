@@ -45,3 +45,6 @@ summary: 没有使用uv时在Pycharm中可以很容易使用jupyter(pycharm会�
 
 ## 相关链接
 {{< link "https://docs.astral.sh/uv/" "uv" "" true "https://docs.astral.sh/uv/assets/logo-letter.svg" >}}
+
+> [!NOTE] 
+> 更新到最新版本Pycharm之后, 似乎已经支持了, 我这里也不想再探究了, 新项目直接 `uv add notebook`, 在notebook中运行之后Pycharm会自动启用

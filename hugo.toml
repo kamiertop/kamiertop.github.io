@@ -169,7 +169,7 @@ posts = "/posts/:title/"
         avatarURL = "/avatar.png"
         typeit = true
         social = true
-        title = "欢迎各位看官"
+        title = "欢迎大家"
     [params.home.posts]
         enable = true
         paginate = 10
