@@ -115,7 +115,7 @@ fn main() {
 }
 ```
 编译成功, 正常执行
-```shell
+```text
 User { age: 25 }
 User { age: 25 }
 User { age: 25 }

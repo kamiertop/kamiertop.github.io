@@ -63,7 +63,7 @@ use clap::Parser;
 #[derive(Parser)] //必须写
 struct Study {
     #[arg(short)]	//short表示使用单横杠方式(默认是首字母): -n <name值> 或者 -n=<name值>
-    // #[arg(short='N')] short默认取首字母, 可能会和其他的冲突, 所以可以手动指定一个字母	
+    // #[arg(short='N')] short默认取首字母, 可能会和其他的冲突, 所以可以手动指定一个字母, 注意这里是一个单引号的字符	
     #[arg(long)]    //short表示使用双横杠方式: --name <name值> 或者 --name=<name值>
     name: String,
 }
@@ -92,7 +92,7 @@ use clap::Parser;
 #[derive(Parser)] //必须写
 #[command(version="0.1.0",about="intro attribute")]	// 指定version和about
 struct Study {
-    #[arg(default_value="default_name")]			// 指定默认值
+    #[arg(default_value="default_name")]			// 指定name字段的默认值
     name: String,
 }
 
@@ -225,8 +225,10 @@ Options:
   -h, --help       Print help
 
 ```
+
 - 可选参数: 使用option包裹
-```rust {hl_lines=[8,19,22] linenos=table}
+
+```rust {hl_lines=[6,19,22] linenos=table}
 use clap::Parser;
 
 #[derive(Parser)]
@@ -248,7 +250,9 @@ Options:
       --name <NAME>
   -h, --help         Print help
 ```
+
 ### 子命令
+
 在clap中声明子命令可以使用以下方式
 ```rust {hl_lines=[6,10] linenos=table}
 use clap::Subcommand;
@@ -298,4 +302,67 @@ Options:
       --url <URL>  URL to fetch
   -h, --help       Print help
 
+```
+
+
+### 枚举
+> 下面代码第13行中可以为One添加别名alias, 或者指定name(这里为了演示, 就使用了abc, 从命令行输入时也要使用abc哦)
+
+```rust {hl_lines=[6,11,13] linenos=table data-open=true}
+use clap::Parser;
+
+#[derive(Parser)]
+struct Study {
+    #[arg(long, short)]
+    #[arg(value_enum)]
+    length: Len,
+}
+
+#[derive(Debug, Clone)]
+#[derive(clap::ValueEnum)]
+enum Len {
+    #[value(name = "abc", alias = "o", help = "1")]
+    One,
+    Two,
+}
+
+fn main() {
+    let cli = Study::parse();
+    println!("{:?}", cli.length);
+}
+
+```
+```text {hl_lines=[6] linenos=table}
+Usage: study-clap.exe --length <LENGTH>
+
+Options:
+  -l, --length <LENGTH>
+          Possible values:
+          - abc: 1
+          - two
+
+  -h, --help
+          Print help (see a summary with '-h')
+```
+
+```text
+cargo run -- --length=o  
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.06s
+     Running `target\debug\study-clap.exe --length=o`
+One
+```
+```text
+cargo run -- --length=abc
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.02s
+     Running `target\debug\study-clap.exe --length=abc`
+One
+```
+> [!tip] 
+> 枚举值解析时默认使用字段名字的小写形式, 比如下面的two, 如果是TwoLine, 那么解析时就是"two-line"
+
+```text
+cargo run -- --length=two
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.02s
+     Running `target\debug\study-clap.exe --length=two`
+Two
 ```
