@@ -13,6 +13,7 @@ toc: true
 math: false
 lightgallery: false
 summary: "clap是rust的一个功能强大的命令行参数解析库"
+lastmod: 2025-09-20
 categories:
   - Rust
 ---
@@ -78,8 +79,6 @@ fn main() {
 // cargo run -- --name=jack
 ```
 
-
-
 ### 属性
 
 - `version`
@@ -114,6 +113,7 @@ Options:
   -V, --version  Print version
 
 ```
+
 - `next_line_help` : 默认false
 ```rust {hl_lines=[5] linenos=table}
 use clap::Parser;
