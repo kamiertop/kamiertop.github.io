@@ -76,6 +76,27 @@ posts = "/posts/:title/"
     weight = 100
     [menu.main.params]
       icon = "fa-regular fa-id-card fa-fw fa-sm"
+  [[menu.main]]
+    identifier = "doc"
+    name = "文档"
+    [menu.main.params]
+      divided = true
+      icon = "fa-solid fa-book"
+
+  [[menu.main]]
+    identifier = "Polars"
+    name = "Polars"
+    parent = "doc"
+    url = "https://polars.kamier.top"
+    [menu.main.params]
+      icon = "fa-solid fa-bolt"
+  [[menu.main]]
+    name = "LaTeX"
+    identifier = "LaTeX"
+    parent = "doc"
+    url = "https://latex.kamier.top"
+    [menu.main.params]
+      icon = "fa-solid fa-text-slash"
 
 
 [markup]
@@ -88,6 +109,7 @@ posts = "/posts/:title/"
 
 
 [params]
+  externalIcon = true
   defaultTheme = "auto"
 
   [params.author]
@@ -276,7 +298,7 @@ posts = "/posts/:title/"
   # 最近更新文章设置
   [params.recentlyUpdated]
       archives = true
-      section = true
+      section = false
       list = true
       days = 30
       maxCount = 10
