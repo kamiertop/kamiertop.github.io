@@ -6,8 +6,9 @@ comment: true
 weight: 0
 description: Windows10 Vmware17 安装Centos-9-stream 引导界面卡顿.
 categories:
-  - tool
+  - misc
 summary: 自己电脑配置还行, 但是引导Centos9时非常卡, 低版本的Centos就没问题
+
 ---
 
 <!--more-->

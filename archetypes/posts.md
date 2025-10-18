@@ -10,7 +10,7 @@ hiddenFromRss: false
 hiddenFromRelated: false
 description: ""
 toc: true
-lastmod: {{ .Lastmod }}
+lastmod: {{ .Date }}
 math: false
 lightgallery: false
 summary: ""
