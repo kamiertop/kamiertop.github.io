@@ -10,7 +10,6 @@ hiddenFromRss: false
 hiddenFromRelated: false
 description:
 toc: true
-#url = "
 math: false
 lightgallery: false
 

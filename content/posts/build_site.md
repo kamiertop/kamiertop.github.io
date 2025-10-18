@@ -8,7 +8,8 @@ hiddenFromSearch: false
 hiddenFromRss: true
 hiddenFromRelated: true
 summary: "记录小站搭建"
-
+categories:
+  - misc
 ---
 
 # Build My Blog Site

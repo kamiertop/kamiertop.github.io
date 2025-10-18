@@ -13,7 +13,7 @@ toc: true
 math: false
 lightgallery: false
 categories:
-  - tool
+  - misc
 summary: 没有使用uv时在Pycharm中可以很容易使用jupyter(pycharm会自己下载), 使用uv会反而不行了, 简单折腾一下
 
 # See details front matter: https://fixit.lruihao.cn/documentation/content-management/introduction/#front-matter
