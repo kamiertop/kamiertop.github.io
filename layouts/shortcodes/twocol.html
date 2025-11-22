@@ -1,0 +1,22 @@
+{{- $gap := .Get "gap" | default "20px" -}}
+{{- $ratio := .Get "ratio" | default "1:1" -}}
+{{- $minWidth := .Get "min-width" | default "250px" -}}
+{{- $border := .Get "border" | default "" -}}
+
+{{- $ratios := split $ratio ":" -}}
+{{- $leftFlex := index $ratios 0 | default "1" -}}
+{{- $rightFlex := index $ratios 1 | default "1" -}}
+
+{{- $content := .Inner | string -}}
+{{- $parts := split $content "===" -}}
+
+
+<div class="twocol-container" style="display: flex; gap: {{ $gap }}; flex-wrap: wrap;">
+  <div class="twocol-left" style="flex: {{ $leftFlex }}; min-width: {{ $minWidth }};">
+    {{- index $parts 0 | markdownify -}}
+  </div>
+
+  <div class="twocol-right" style="flex: {{ $rightFlex }}; min-width: {{ $minWidth }};">
+    {{- index $parts 1 | markdownify -}}
+  </div>
+</div>

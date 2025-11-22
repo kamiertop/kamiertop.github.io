@@ -83,20 +83,20 @@ posts = "/posts/:title/"
       divided = true
       icon = "fa-solid fa-book"
 
-  [[menu.main]]
-    identifier = "Polars"
-    name = "Polars"
-    parent = "doc"
-    url = "https://polars.kamier.top"
-    [menu.main.params]
-      icon = "fa-solid fa-bolt"
-  [[menu.main]]
-    name = "LaTeX"
-    identifier = "LaTeX"
-    parent = "doc"
-    url = "https://latex.kamier.top"
-    [menu.main.params]
-      icon = "fa-solid fa-text-slash"
+  # [[menu.main]]
+  #   identifier = "Polars"
+  #   name = "Polars"
+  #   parent = "doc"
+  #   url = "https://polars.kamier.top"
+  #   [menu.main.params]
+  #     icon = "fa-solid fa-bolt"
+  # [[menu.main]]
+  #   name = "LaTeX"
+  #   identifier = "LaTeX"
+  #   parent = "doc"
+  #   url = "https://latex.kamier.top"
+  #   [menu.main.params]
+  #     icon = "fa-solid fa-text-slash"
 
 
 [markup]
@@ -104,6 +104,9 @@ posts = "/posts/:title/"
   [markup.highlight]
     # false 是必要的设置 (https://github.com/hugo-fixit/FixIt/issues/43)
     noClasses = false
+    lineNos = true
+    lineNumberInTable = true
+    lineNoStart = 1
   [markup.goldmark.renderer]
     unsafe = true
 
@@ -137,10 +140,12 @@ posts = "/posts/:title/"
       copyTex = true
       # KaTeX 插件 mhchem
       mhchem = true
+    # 是否启用代码块包装器
     [params.page.code]
+      enable=true
       copy = true
       edit = false
-      maxShownLines = 10
+      maxShownLines = 20
     [params.page.share]
       enable = false
     [params.page.comment]
@@ -333,4 +338,3 @@ home = ["HTML", "JSON"]
   mediaType = "text/markdown"
   isPlainText = true
   isHTML = false
-
