@@ -102,11 +102,11 @@ posts = "/posts/:title/"
 [markup]
   # 语法高亮设置 (https://gohugo.io/content-management/syntax-highlighting)
   [markup.highlight]
-    # false 是必要的设置 (https://github.com/hugo-fixit/FixIt/issues/43)
     noClasses = false
-    lineNos = true
-    lineNumberInTable = true
-    lineNoStart = 1
+    lineNos = true  # 默认显示行号
+    lineNumberInTable = true # 显示行号则使用表格形式
+    lineNoStart = 1 # 默认从1开始
+    anchorLineNos=false # 默认不生成行号锚点
   [markup.goldmark.renderer]
     unsafe = true
 

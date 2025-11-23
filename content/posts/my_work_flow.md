@@ -51,9 +51,11 @@ categories:
 ## PDF
 
 ### 编辑工具
+
 这里使用[PDFgear](https://www.pdfgear.com/zh/), 因为可以编辑PDF, 比如修改书签等
 
 ### 阅读工具
+
 一开始一直使用Chrome, 后面因为要写LaTeX, 编译后的文件变化后, Chrome无法自动刷新, 于是选择了[Sumatra PDF](https://www.sumatrapdfreader.org/free-pdf-reader)
 
 ## IDE
@@ -62,12 +64,15 @@ categories:
 不过我认为目前最好用的还是Jetbrains的
 
 ## 浏览器
+
 话不多说, 只有Chrome
 
 ## Shell
+
 我使用[Cygwin](https://cygwin.com/)+zsh+oh-my-zsh, Cygwin下载一些常用的软件(tree, wget, vim, git, ssh)非常方便, 谁用谁知道
 
 ## 其他软件
+
 - V2rayN
 - Q-Dir(文件管理器, 可以分栏使用)
 - 7-Zip(解压缩)

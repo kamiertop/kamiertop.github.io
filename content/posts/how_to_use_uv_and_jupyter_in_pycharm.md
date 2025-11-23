@@ -22,11 +22,13 @@ summary: 没有使用uv时在Pycharm中可以很容易使用jupyter(pycharm会�
 <!--more-->
 
 ## 前情提要
+
 最近开始学习机器学习相关的内容, 难免要用到 `Jupyter`
 之前并没有使用 `uv`来管理环境, 在项目中新建一个 `ipynb`文件, pycharm会自动下载Jupyter
 完全使用uv之后, pycharm反而无法下载成功, 翻看 `uv`文档之后简单折腾了一下, 找到了解决方案
 
 ## 解决
+
 - 安装全局jupyter-lab: `uv tool install jupyter-lab`
 - 生成配置文件: `jupyter lab --generate-config`
 - 编辑配置文件, 添加以下内容
@@ -44,6 +46,7 @@ summary: 没有使用uv时在Pycharm中可以很容易使用jupyter(pycharm会�
 > 注意配置当前项目的解释器, 需要设置为`uv`
 
 ## 相关链接
+
 {{< link "https://docs.astral.sh/uv/" "uv" "" true "https://docs.astral.sh/uv/assets/logo-letter.svg" >}}
 
 > [!NOTE] 

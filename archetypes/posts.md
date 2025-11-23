@@ -17,6 +17,23 @@ summary: ""
 categories:
   - 
 # See details front matter: https://fixit.lruihao.cn/documentation/content-management/introduction/#front-matter
+# 图标支持：https://fixit.lruihao.cn/zh-cn/documentation/content-management/diagrams-support/mermaid/
 ---
 
 <!--more-->
+
+<!--
+```mermaid
+---
+config:
+  theme: 'default'
+---
+```
+-->
+
+<!--
+```js {.no-header data-open=true}
+
+```
+
+-->
