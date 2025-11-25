@@ -12,11 +12,13 @@ description:
 toc: true
 math: false
 lightgallery: false
-
+categories:
+  - misc
 # See details front matter: https://fixit.lruihao.cn/documentation/content-management/introduction/#front-matter
 ---
 
 <!--more-->
+
 吐槽Windows10！
 
 系统更新前必卡, 此时重启, 一定显示系统更新, 更新完之后就恢复正常了!

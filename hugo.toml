@@ -106,9 +106,22 @@ posts = "/posts/:title/"
     lineNos = true  # 默认显示行号
     lineNumberInTable = true # 显示行号则使用表格形式
     lineNoStart = 1 # 默认从1开始
-    anchorLineNos=false # 默认不生成行号锚点
+    anchorLineNos = false # 默认不生成行号锚点
   [markup.goldmark.renderer]
     unsafe = true
+  [markup.goldmark.extensions]
+    # 公式渲染支持
+    [markup.goldmark.extensions.passthrough]
+        enable = true
+      [markup.goldmark.extensions.passthrough.delimiters]
+        block = [['\[', '\]'], ['$$', '$$']]
+        inline = [['\(', '\)'], ['$', '$']]
+  [markup.goldmark.parser]
+  # markdown 属性: https://gohugo.io/content-management/markdown-attributes/
+    [markup.goldmark.parser.attaribute]
+      bolck = true
+      title = true
+
 
 
 [params]
@@ -130,16 +143,10 @@ posts = "/posts/:title/"
     titleCaseStyle = "ap"
     [params.page.math]
       enable = true
-      # 默认行内定界符是 $ ... $ 和 \( ... \)
-      inlineLeftDelimiter = ""
-      inlineRightDelimiter = ""
-      # 默认块定界符是 $$ ... $$, \[ ... \],  \begin{equation} ... \end{equation} 和一些其它的函数
-      blockLeftDelimiter = ""
-      blockRightDelimiter = ""
-      # KaTeX 插件 copy_tex
-      copyTex = true
-      # KaTeX 插件 mhchem
-      mhchem = true
+      type = "katex"
+      errorColor = "#ff4949"
+      [params.page.math.katex]
+        copyTex = true
     # 是否启用代码块包装器
     [params.page.code]
       enable=true
