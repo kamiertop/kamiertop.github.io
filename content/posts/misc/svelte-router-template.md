@@ -13,10 +13,9 @@ toc: true
 lastmod: 2025-11-22T17:28:16+08:00
 math: false
 lightgallery: false
-summary: ""
+summary: "svelte路由模板"
 categories:
   - misc
-# See details front matter: https://fixit.lruihao.cn/documentation/content-management/introduction/#front-matter
 ---
 
 <!--more-->
