@@ -1,5 +1,5 @@
 ---
-title: solid router template
+title: SolidJS router template
 date: 2025-11-22T17:28:02+08:00
 draft: false
 comment: true

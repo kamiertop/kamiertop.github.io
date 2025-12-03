@@ -17,7 +17,7 @@ math: true
 lightgallery: false
 summary: "分层3DGS的论文讲解和代码复现，并补充一些3DGS的基础前置知识"
 categories:
-  - 论文
+  - Paper
 ---
 
 {{<link "https://repo-sam.inria.fr/fungraph/hierarchical-3d-gaussians/" "Paper_Project" "" true>}}

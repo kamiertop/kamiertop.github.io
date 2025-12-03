@@ -55,13 +55,13 @@ posts = "/posts/:title/"
     weight = 2
     [menu.main.params]
       icon = "fa-solid fa-folder-tree "
-  [[menu.main]]
-    identifier = "tags"
-    name = "标签"
-    url = "/tags/"
-    weight = 3
-    [menu.main.params]
-      icon = "fa-solid fa-tags fa-fw fa-sm"
+  # [[menu.main]]
+  #   identifier = "tags"
+  #   name = "标签"
+  #   url = "/tags/"
+  #   weight = 3
+  #   [menu.main.params]
+  #     icon = "fa-solid fa-tags fa-fw fa-sm"
   [[menu.main]]
     identifier = "friends"
     name = "友链"
@@ -76,12 +76,12 @@ posts = "/posts/:title/"
     weight = 100
     [menu.main.params]
       icon = "fa-regular fa-id-card fa-fw fa-sm"
-  [[menu.main]]
-    identifier = "doc"
-    name = "文档"
-    [menu.main.params]
-      divided = true
-      icon = "fa-solid fa-book"
+  # [[menu.main]]
+  #   identifier = "doc"
+  #   name = "文档"
+  #   [menu.main.params]
+  #     divided = true
+  #     icon = "fa-solid fa-book"
 
   # [[menu.main]]
   #   identifier = "Polars"
