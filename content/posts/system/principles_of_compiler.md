@@ -163,6 +163,195 @@ graph LR;
 
 ## 词法分析
 
+- 词法分析器的结构：输入缓冲区 -> 预处理子程序(剔除无用的空白跳格、回车，区分标号区、连接续行和给出句末符等) -> 扫描缓冲区 -> 扫描器 -> 单词符号
+- 扫描缓冲区：使用起点指示器和搜索指示器
+  - 将缓冲区分为两个半区， 两个半区互补使用
+- 单词符号的识别：超前搜索
+  - 关键字识别
+    - 以Fortran语言的DO关键字为例：`DO99K=1,10 -> DO 99 k = 1, 1=`；`DO99k=1.0`，只有<u>超前扫描</u>到`,和.`才能知道是干嘛的
+  - 标识符识别：字母开头的字母数字串，后跟界符或算符
+  - 常数识别：识别出算数常数并将其转变为二进制内码表示
+  - 算符和界符的识别
+- 几点限制——不必使用超前搜索（可读性强，词法分析方便）
+  - **所有关键字都是保留字**
+  - **关键字作为特殊的标识符来处理**，使用保留字表
+  - 如果关键字（基本字）、标识符和常数之间没有确定的运算符或界符作间隔，则必须**使用一个空白符做间隔**
+- 状态转换图：一张有限方向图
+  - 只包含有限个状态，其中一个为**初态**，至少要有一个终态
+- 一个简单的词法分析程序，由Golang实现，Copilot给出了一个极简的代码用于学习
+
+```golang
+package main
+
+import (
+	"fmt"
+	"unicode"
+)
+
+type Token struct {
+	Kind string
+	Lit  string
+}
+
+const (
+	Reset = "\033[0m"
+	Red   = "\033[31m"
+	Blue  = "\033[34m"
+)
+
+func RedString(str string) string {
+	return Red + str + Reset
+}
+
+func BlueString(str string) string {
+	return Blue + str + Reset
+}
+
+var keywords = map[string]string{
+	"package": "KW_PACKAGE",
+	"func":    "KW_FUNC",
+	"var":     "KW_VAR",
+	"return":  "KW_RETURN",
+	"int":     "KW_TYPE_INT",
+	"println": "KW_BUILTIN_FUNC",
+	"main":    "KW_MAIN",
+}
+
+func main() {
+	srcCode := `
+package main
+
+func main() {
+	var a int = 10
+	println(a)
+}
+`
+	println(srcCode)
+	tokens := Lex(srcCode)
+	for _, tok := range tokens {
+		fmt.Printf("Kind: %-15s Lit: %s\n", tok.Kind, tok.Lit)
+	}
+}
+
+func Lex(src string) []Token {
+	var tokens []Token
+	r := []rune(src)
+	for i, n := 0, len(r); i < n; {
+		ch := r[i]
+		// whitespace
+		if unicode.IsSpace(ch) {
+			if ch == '\n' {
+				tokens = append(tokens, Token{Kind: "NEWLINE", Lit: "\n"})
+			}
+			i++
+			continue
+		}
+		// identifier / keyword
+		if unicode.IsLetter(ch) {
+			j := i + 1
+			for j < n {
+				if unicode.IsLetter(r[j]) || unicode.IsDigit(r[j]) {
+					j++
+				} else {
+					break
+				}
+			}
+			lit := string(r[i:j])
+			if tokenType, ok := keywords[lit]; ok {
+				tokens = append(tokens, Token{Kind: RedString(tokenType), Lit: BlueString(lit)})
+			} else {
+				tokens = append(tokens, Token{Kind: "IDENTIFIER", Lit: lit})
+			}
+			// update i
+			i = j
+			continue
+		}
+		// number literal
+		if unicode.IsDigit(ch) {
+			j := i + 1
+			for j < n && unicode.IsDigit(r[j]) {
+				j++
+			}
+			tokens = append(tokens, Token{Kind: "NUMBER", Lit: string(r[i:j])})
+			i = j
+			continue
+		}
+		if ch == ':' && i+1 < n && r[i+1] == '=' {
+			tokens = append(tokens, Token{Kind: "OP_ASSIGN", Lit: ":="})
+			i += 2
+			continue
+		}
+		// string literal
+		if ch == '"' {
+			j := i + 1
+			for j < n && r[j] != '"' {
+				if r[j] == '\\' && j+1 < n {
+					j += 2
+				} else {
+					j++
+				}
+			}
+			if j < n && r[j] == '"' {
+				j++
+			}
+			tokens = append(tokens, Token{"STRING", string(r[i:j])})
+			i = j
+			continue
+		}
+		// single char symbol
+		tokens = append(tokens, Token{"SingleCharacterSymbol", string(ch)})
+		i++
+	}
+
+	return append(tokens, Token{Kind: "EOF", Lit: ""})
+}
+
+```
+
+```text
+
+package main
+
+func main() {
+        var a int = 10
+        println(a)
+}
+
+Kind: NEWLINE         Lit:
+
+Kind: KW_PACKAGE Lit: package
+Kind: KW_MAIN Lit: main
+Kind: NEWLINE         Lit:
+
+Kind: NEWLINE         Lit:
+
+Kind: KW_FUNC Lit: func
+Kind: KW_MAIN Lit: main
+Kind: SingleCharacterSymbol Lit: (
+Kind: SingleCharacterSymbol Lit: )
+Kind: SingleCharacterSymbol Lit: {
+Kind: NEWLINE         Lit:
+
+Kind: KW_VAR Lit: var
+Kind: IDENTIFIER      Lit: a
+Kind: KW_TYPE_INT Lit: int
+Kind: SingleCharacterSymbol Lit: =
+Kind: NUMBER          Lit: 10
+Kind: NEWLINE         Lit:
+
+Kind: KW_BUILTIN_FUNC Lit: println
+Kind: SingleCharacterSymbol Lit: (
+Kind: IDENTIFIER      Lit: a
+Kind: SingleCharacterSymbol Lit: )
+Kind: NEWLINE         Lit:
+
+Kind: SingleCharacterSymbol Lit: }
+Kind: NEWLINE         Lit:
+
+Kind: EOF             Lit:
+
+```
+
 ## 语法分析
 
 ## 属性文法和语法制导翻译
