@@ -20,13 +20,12 @@ categories:
 
 <!--more-->
 
-# Rust Trait: Copy和Clone
-
-> 简单记录下对Copy和Clone的理解
+> [!NOTE] 简单记录下对Copy和Clone的理解
 
 ## 未实现`Clone`, 移动语义
 
 下面的例子中, 第13行打印u时报错, 是因为u被移动到了`another_u`, u的值被释放了
+
 ```rust {hl_lines=[13] linenos=table}
 #[derive(Debug)]
 #[allow(unused)]
@@ -47,6 +46,7 @@ fn main() {
 
 编译报错信息如下, 提示我们User没有实现`Copy`这个`trait`, 第13行借用了第12行中已经移动了的u
 还提示可以实现 `Clone` trait
+
 ```shell {hl_lines=[5,8,10,12,16,19] linenos=table}
 error[E0382]: borrow of moved value: `u`
   --> src\main.rs:13:21
@@ -72,6 +72,7 @@ note: if `User` implemented `Clone`, you could clone the value
 ```
 
 ## 实现 `Clone`
+
 实现`Clone` trait之后, 可以显式调用`clone()`方法来进行深拷贝
 
 > [!TIP]
@@ -114,7 +115,9 @@ fn main() {
     println!("{:?}",another_u);
 }
 ```
+
 编译成功, 正常执行
+
 ```text
 User { age: 25 }
 User { age: 25 }
@@ -122,4 +125,5 @@ User { age: 25 }
 ```
 
 ## 其他
+
 Copy是按位做浅拷贝，那么它会默认拷贝的数据没有需要释放的资源；而Drop恰恰是为了释放额外的资源而生的

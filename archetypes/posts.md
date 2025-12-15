@@ -1,7 +1,7 @@
 ---
-title: { { replace .TranslationBaseName "-" " " | title } }
+title: {{ replace .TranslationBaseName "-" " " | title }}
 subtitle: ""
-date: { { .Date } }
+date: {{ .Date }}
 draft: false
 comment: true
 weight: 0

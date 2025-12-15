@@ -25,15 +25,17 @@ categories:
 
 对于简单的参数完全可以手动处理无需引入额外的依赖, 但当命令和参数比较多的时候可以就可以使用第三方库来简化开发
 
-# clap
 - clap提供两种模式, builder模式和derive模式, 具体使用哪种方式全凭个人喜好
   - derive模式通过宏自动生成代码, 将参数映射到struct或者enum中, 结构清晰, 但需要查阅文档记一下参数
   - builder模式支持动态参数, 运行时配置和一些复杂的校验逻辑, 可以按需构建解析器, 但需要手动维护参数和子命令的层次结构
 - clap会自动生成帮助文档
+
 ## derive模式
-- 安装:  `cargo add clap --features derive`
+
+> [!NOTE] 安装: `cargo add clap --features derive`
 
 ### 位置参数
+
 > x <属性值1> <属性值2>
 
 ```rust {hl_lines=[3] linenos=table}
@@ -58,13 +60,14 @@ fn main() {
 ```
 
 ### 命名参数
+
 ```rust {hl_lines=[3,5,7] linenos=table}
 use clap::Parser;
 
 #[derive(Parser)] //必须写
 struct Study {
     #[arg(short)]	//short表示使用单横杠方式(默认是首字母): -n <name值> 或者 -n=<name值>
-    // #[arg(short='N')] short默认取首字母, 可能会和其他的冲突, 所以可以手动指定一个字母, 注意这里是一个单引号的字符	
+    // #[arg(short='N')] short默认取首字母, 可能会和其他的冲突, 所以可以手动指定一个字母, 注意这里是一个单引号的字符
     #[arg(long)]    //short表示使用双横杠方式: --name <name值> 或者 --name=<name值>
     name: String,
 }
@@ -84,6 +87,7 @@ fn main() {
 - `version`
 - `default_value`
 - `name`
+
 ```rust {hl_lines=[6] linenos=table}
 use clap::Parser;
 
@@ -115,6 +119,7 @@ Options:
 ```
 
 - `next_line_help` : 默认false
+
 ```rust {hl_lines=[5] linenos=table}
 use clap::Parser;
 
@@ -145,12 +150,13 @@ Options:
           Print help
   -V, --version
           Print version
- 
+
 ```
 
 - `help`
   - arg指定
   - 文档注释(三斜杠)
+
 ```rust {hl_lines=[6,19] linenos=table}
 use clap::Parser;
 
@@ -199,6 +205,7 @@ Options:
 ```
 
 - `value_name` : 提示输出的值的名字
+
 ```rust {hl_lines=[8,19,22] linenos=table}
 use clap::Parser;
 
@@ -215,7 +222,7 @@ struct Study {
 fn main() {
     let cli = Study::parse();
     println!("{}",cli.name);
-} 
+}
 // cargo run -- --help
 // demo --help
 Usage: demo.exe --name <名字>
@@ -240,7 +247,7 @@ struct Study {
 fn main() {
     let cli = Study::parse();
     println!("{:?}",cli.name);
-} 
+}
 // cargo run -- --help
 // demo --help
 // 可以看到name是可选参数
@@ -254,6 +261,7 @@ Options:
 ### 子命令
 
 在clap中声明子命令可以使用以下方式
+
 ```rust {hl_lines=[6,10] linenos=table}
 use clap::Subcommand;
 use clap::Parser;
@@ -290,7 +298,7 @@ Commands:
 
 Options:
   -h, --help  Print help
-  
+
 // 查看子命令的帮助信息
 // cargo run -- help get
 // demo help get
@@ -304,8 +312,8 @@ Options:
 
 ```
 
-
 ### 枚举
+
 > 下面代码第13行中可以为One添加别名alias, 或者指定name(这里为了演示, 就使用了abc, 从命令行输入时也要使用abc哦)
 
 ```rust {hl_lines=[6,11,13] linenos=table data-open=true}
@@ -332,6 +340,7 @@ fn main() {
 }
 
 ```
+
 ```text {hl_lines=[6] linenos=table}
 Usage: study-clap.exe --length <LENGTH>
 
@@ -346,18 +355,20 @@ Options:
 ```
 
 ```text
-cargo run -- --length=o  
+cargo run -- --length=o
     Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.06s
      Running `target\debug\study-clap.exe --length=o`
 One
 ```
+
 ```text
 cargo run -- --length=abc
     Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.02s
      Running `target\debug\study-clap.exe --length=abc`
 One
 ```
-> [!tip] 
+
+> [!tip]
 > 枚举值解析时默认使用字段名字的小写形式, 比如下面的two, 如果是TwoLine, 那么解析时就是"two-line"
 
 ```text
