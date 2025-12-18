@@ -384,6 +384,43 @@ Kind: EOF             Lit:
     - f(S1, b) = S2：读到b，从状态S1转移到状态S2，表示已经读到了ab
     - f(S2, a) = S1：读到a，从状态S2转移到状态S1，表示已经读到了a，要去找b
     - f(S2, b) = S0：读到b，从状态S2转移到初态S0，表示还没有读到a
+  - 一段简单的代码如下
+
+  ```rust
+  enum State {
+      Start,
+      SawA,
+      SawAB,
+  }
+
+  fn transition(state: State, input: char) -> State {
+      match state {
+          State::Start => {
+              match input { 'a' => State::SawA, _ => State::Start }
+          }
+          State::SawA => {  // 已经看到了a
+              match input { 'a' => State::SawA, 'b' => State::SawAB, _ => State::Start }
+          }
+          State::SawAB => {
+              match input { 'a' => State::SawA, 'b' => State::Start, _ => State::Start }
+          }
+      }
+  }
+
+  fn main(){
+      let test_list:[&str;9] = ["ab","","a","b","aba","ab","abab","aab","bba"];
+      for str in test_list {
+          let mut current_state = State::Start;
+          for ch in str.chars() {
+              current_state = transition(current_state, ch);
+          }
+          match current_state {
+              State::SawAB => println!("'{}' is accepted by the DFA", str),
+              _ => println!("'{}' is rejected by the DFA", str),
+          }
+      }
+  }
+  ```
 
 ### 非确定优先自动机NFA(Nondeterministic Finite Automata)
 
