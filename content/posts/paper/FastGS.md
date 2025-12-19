@@ -52,13 +52,13 @@ $$\mathcal{M} ^j=\mathcal{N} \left( \{\,e_{u,v}^{j}\,\}_{u=0,v=0}^{W-1,H-1} \rig
 $W$表示width, $H$表示height, $\mathcal{N} (\cdot )$表示对结果进行最小-最大归一化
 4. 设置阈值$\tau_d$筛选出高误差像素, 也就是渲染质量差的区域, 形成高误差掩码$$\mathcal{M}^j_\text{mask} = \mathbb{I}(\mathcal{M}^j > \tau)$$
 5. 对于像素$P$来说, $\mathcal{M}^j_\text{mask}(u,v) = 1$表示渲染质量差
-![loss_map](/paper/fastgs/loss_map.jpg)
-6. 接下来需要找到质量差的像素是由哪些高斯负责的
+6. ![loss_map](/paper/fastgs/loss_map.jpg)
+7. 接下来需要找到质量差的像素是由哪些高斯负责的
     1. 3DGS投影到2D图像平面, 可以得到在该视图下的2D覆盖范围(足迹)$\Omega_i$
     2. 统计每个高斯体的2D足迹包含的高误差像素数量, 对应该高斯体对应区域的渲染质量差
-7. 对每个高斯体, 将其在K个视图中的高误差像素数量求和后取平均, 得到致密化重要性分数
+8. 对每个高斯体, 将其在K个视图中的高误差像素数量求和后取平均, 得到致密化重要性分数
 $$ s_{d}^{i}=\frac{1}{K}\sum_{j=1}^K{\sum_p^{\varOmega _i}{\mathbb{I} \left( \mathcal{M} _{mask}^{j}\left( p \right) =1 \right)}} $$
-8. 仅当重要性分数超过阈值$s^{i}_d$时, 才对其进行致密化, 确保新生成的高斯体聚焦于欠重建区域
+9. 仅当重要性分数超过阈值$s^{i}_d$时, 才对其进行致密化, 确保新生成的高斯体聚焦于欠重建区域
 
 ### Multi-View Consistent Pruning(VCP)
 
