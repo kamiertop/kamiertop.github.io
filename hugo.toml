@@ -123,7 +123,6 @@ posts = "/posts/:title/"
       title = true
 
 
-
 [params]
   externalIcon = true
   defaultTheme = "auto"
