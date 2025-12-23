@@ -33,7 +33,7 @@ config:
 -->
 
 <!--
-```js {.no-header data-open=true}
+```js {.no-header data-open=true name="name" title="title"}
 
 ```
 

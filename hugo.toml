@@ -127,7 +127,21 @@ posts = "/posts/:title/"
 [params]
   externalIcon = true
   defaultTheme = "auto"
-
+  [params.jsonViewer]
+    enable = true
+    expandDepth = 1
+    copyable = true
+    sort = false
+    boxed = true
+  [params.codeblock]
+    wrapper = true
+    mode = "classic"
+    wrapperClass = ""
+    maxShownLines = 20
+    copyable = true
+    lineNosToggler = true
+    lineWrapToggler = true
+    editable = true
   [params.author]
     name = "kamiertop"
     avatar = "/avatar.png"
@@ -147,12 +161,6 @@ posts = "/posts/:title/"
       errorColor = "#ff4949"
       [params.page.math.katex]
         copyTex = true
-    # 是否启用代码块包装器
-    [params.page.code]
-      enable=true
-      copy = true
-      edit = false
-      maxShownLines = 20
     [params.page.share]
       enable = false
     [params.page.comment]
