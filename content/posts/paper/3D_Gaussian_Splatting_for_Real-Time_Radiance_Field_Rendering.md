@@ -148,11 +148,12 @@ $$\Sigma' = J W \Sigma W^T J^T$$
 
 ![sh](/paper/3dgs/sh.jpg)
 
-![](/paper/3dgs/blending.jpg)
 
 不直接使用RGB的原因：颜色固定，无法很好的处理同一个物体在不同视角下的高光、反射。我们的期望是更好的处理RGB不能解决的问题
 
 ### `α-blending`
+
+![](/paper/3dgs/blending.jpg)
 
 投影后的2D高斯通过**Splatting**绘制到图像。对于每个像素，需要混合所有覆盖它的高斯。
 
