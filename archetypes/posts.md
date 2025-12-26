@@ -33,7 +33,7 @@ config:
 -->
 
 <!--
-```js {.no-header data-open=true name="name" title="title"}
+```js {wrapperClass="is-expanded is-collapsed" wrapper=true name="name" title="title"}
 
 ```
 

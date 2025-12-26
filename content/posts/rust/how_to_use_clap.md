@@ -316,7 +316,7 @@ Options:
 
 > 下面代码第13行中可以为One添加别名alias, 或者指定name(这里为了演示, 就使用了abc, 从命令行输入时也要使用abc哦)
 
-```rust {hl_lines=[6,11,13] linenos=table data-open=true}
+```rust {hl_lines=[6,11,13] linenos=table}
 use clap::Parser;
 
 #[derive(Parser)]

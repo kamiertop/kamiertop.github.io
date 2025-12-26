@@ -103,7 +103,7 @@ async fn main() {
 > [!SUCCESS] 展开后的代码如下
 > 可以看到上面代码3-8行被放到了下面的`body`变量中, 然后`body`被第26行的`block_on`阻塞等待
 
-```rust {data-open=false hl_lines=["8-13"]}
+```rust {hl_lines=["8-13"]}
 #![feature(prelude_import)]
 #[macro_use]
 extern crate std;
@@ -244,8 +244,118 @@ i: 3, instant: Instant { t: 17577.0124982s }
 i: 4, instant: Instant { t: 17578.0124982s }
 ```
 
+## `tokio::mpsc`
+
+> [!NOTE] 多生产者单消费者异步通道
+> `tokio::mpsc`为异步任务通信提供了一个多生产者单消费者通道, 返回一个`Sender`和一个`Receiver`
+
+### Bounded Channel
+
+> [!TIP] 有界通道
+> 有界通道是指通道的缓冲区大小是有限的, 当通道满时, 生产者会阻塞, 直到有消费者消费数据
+
+#### Example1
+
+```rust {hl_lines=[5,10,20]}
+use tokio::sync::mpsc::{Receiver, Sender, channel};
+
+#[tokio::main]
+async fn main() {
+    let (tx, mut rx): (Sender<i32>, Receiver<i32>) = channel(100);
+
+    // 发送任务
+    tokio::spawn(async move {
+        for i in 0..5 {
+            if tx.send(i).await.is_err() {
+                println!("接收者已关闭");
+                return;
+            }
+            println!("发送任务: {}", i);
+        }
+    });
+    // tx离开此作用域后, 发送者会被关闭, 这会导致接收者收到None
+
+    // 接收任务
+    while let Some(task) = rx.recv().await {
+        println!("[接收任务]: {}", task);
+    }
+    
+    println!("所有任务已处理完毕");
+
+    println!("再次尝试接收任务: {:?}", rx.recv().await);
+}
+
+```
+
+我们来看下输出, 可以看到接收完所有数据后, 再次尝试接收会返回`None`
+
+```text {wrapper=false hl_lines=[12]}
+发送任务: 0
+发送任务: 1
+发送任务: 2
+发送任务: 3
+发送任务: 4
+[接收任务]: 0
+[接收任务]: 1
+[接收任务]: 2
+[接收任务]: 3
+[接收任务]: 4
+所有任务已处理完毕
+再次尝试接收任务: None
+```
+
+#### Example2
+
+> [!NOTE]
+> 既然是多生产者, 那么我们就可以克隆 `tx` 来创建多个发送者, 查看下面代码
+> 需要注意的是, 第28行 `drop(tx)` 是为了关闭通道, 接收者接收完数据后收到`None`, 否则会导致接收者一直阻塞
+
+```rust {hl_lines=[5,6,7,28]}
+use tokio::sync::mpsc;
+
+#[tokio::main]
+async fn main() {
+    let (tx, mut rx) = mpsc::channel(3);
+    let tx1 = tx.clone();
+    let tx2 = tx.clone();
+
+    tokio::spawn(async move {
+        for i in 0..3 {
+            if tx1.send(format!("任务1发送: {}", i)).await.is_err() {
+                println!("任务1：接收端已关闭，发送失败");
+                return;
+            }
+        }
+        println!("任务1：发送完成");
+    });
+
+    tokio::spawn(async move {
+        for i in 0..3 {
+            if tx2.send(format!("任务2发送: {}", i)).await.is_err() {
+                println!("任务2：接收端已关闭，发送失败");
+                return;
+            }
+        }
+        println!("任务2：发送完成");
+    });
+    drop(tx);
+    while let Some(msg) = rx.recv().await {
+        println!("[接收数据]: {}", msg);
+    }
+}
+```
+
+#### Example3
+
+> [!NOTE]
+> `mpsc::channel` 是一个有界通道, 它的缓冲区大小是有限的, 当通道满时, 生产者会阻塞当前task, 直到有消费者消费数据
+
+### Unbounded Channel
+
+> [!TIP] 无界通道
+> 无界通道是指通道的缓冲区大小是无限的, 当通道满时, 生产者会阻塞, 直到有消费者消费数据
+
 ## `tokio::sync`
 
 > [!NOTE] 同步原语
 > `tokio::sync`为异步任务提供了很多同步原语, 熟悉Golang的可能会觉得很亲切 ![](/golang/walk.gif)
-> 

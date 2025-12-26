@@ -135,7 +135,6 @@ posts = "/posts/:title/"
   [params.codeblock]
     wrapper = true
     mode = "classic"
-    wrapperClass = ""
     maxShownLines = 20
     copyable = true
     lineNosToggler = true
