@@ -233,6 +233,8 @@ async fn main() {
 
 ```
 
+可以看到下面输出的第一行和第二行几乎是一样的, 正好印证第一次调用是立即完成的
+
 ```text {hl_lines=[1,2] wrapper=false}
 第一次会立即调用, tick()之前打印时间观察: Instant { t: 17574.0125039s }
 i: 0, instant: Instant { t: 17574.0124982s }
@@ -241,3 +243,9 @@ i: 2, instant: Instant { t: 17576.0124982s }
 i: 3, instant: Instant { t: 17577.0124982s }
 i: 4, instant: Instant { t: 17578.0124982s }
 ```
+
+## `tokio::sync`
+
+> [!NOTE] 同步原语
+> `tokio::sync`为异步任务提供了很多同步原语, 熟悉Golang的可能会觉得很亲切 ![](/golang/walk.gif)
+> 

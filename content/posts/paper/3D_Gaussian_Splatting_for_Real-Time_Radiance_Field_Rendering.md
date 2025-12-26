@@ -25,6 +25,8 @@ categories:
 
 {{<link "https://repo-sam.inria.fr/fungraph/3d-gaussian-splatting/" "Project_Page" "" true>}}
 
+![](/paper/3dgs/view.jpg)
+
 ## 研究背景
 
 > [!ERROR] Neural Radiance Field（NeRF）技术在多视角图像合成领域取得显著进展，现有方法在训练和渲染速度上存在瓶颈，无法实现实时高质量渲染
@@ -145,6 +147,9 @@ $$\Sigma' = J W \Sigma W^T J^T$$
 ### 球谐函数表示颜色
 
 ![sh](/paper/3dgs/sh.jpg)
+
+![](/paper/3dgs/blending.jpg)
+
 不直接使用RGB的原因：颜色固定，无法很好的处理同一个物体在不同视角下的高光、反射。我们的期望是更好的处理RGB不能解决的问题
 
 ### `α-blending`
