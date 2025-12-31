@@ -23,21 +23,79 @@ categories:
 
 - 在Golang中使用并发非常简单, 通过 `go`关键字即可调用一个函数交由GMP模型调度管理.
 - 在Rust中实现并发的模式有很多种, 这里学一下`Tokio`, `Tokio`已经是Rust异步运行时的事实标准了
-- Golang有内置的Runtime，而Rust的Tokio则是一个异步运行时库，可以显式创建或通过宏来使用
 
-## 创建运行时
+```mermaid
+flowchart TD
+    tokio --> fs
+    tokio --> io
+    tokio --> net
+    tokio --> process
+    tokio --> runtime
+    tokio --> signal
+    tokio --> stream
+    tokio --> sync
+    tokio --> task
+    tokio --> time
+```
 
-### 显式创建运行时
+
+## `tokio::runtime`
+
+> 在Golang中运行时是内置的, 在Rust中则由第三方来实现, `tokio`中创建运行时有2种方式
+
+### explicit
+
+#### `tokio::runtime::Builder`
+
+> [!SUCCESS]
+> 使用Builder的好处是我们可以**精细化的**或者**基于配置的**创建`runtime`
+
+```rust {hl_lines=[11,14,17,20] wrapper=false}
+use std::io;
+use tokio::runtime::Builder;
+use tokio::runtime::Runtime;
+
+fn main() -> io::Result<()> {
+    let config = Config {
+        thread_name: "my_tokio_thread".to_string(),
+        worker_threads: 4,
+        // ...
+    };
+    let mut builder: Builder = Builder::new_multi_thread(); // 先创建一个Builder
+
+    if !config.thread_name.is_empty() {				
+        builder.thread_name(config.thread_name);			// 基于配置动态设置Runtime
+    }
+    if config.worker_threads > 0 {
+        builder.worker_threads(config.worker_threads);
+    }
+
+    let rt: Runtime = builder.build()?;
+
+    Ok(())
+}
+
+struct Config {
+    thread_name: String,
+    worker_threads: usize,
+    // ...
+}
+
+```
+
+##### multi_thread
 
 ```rust {title="cargo add tokio --features rt-multi-thread" hl_lines=[4]}
 use tokio::runtime::Builder;
-
+// multi_thread需要 features: rt-multi-thread
 fn main() -> Result<(), std::io::Error> {
-    let rt = Builder::new_multi_thread().enable_time().build()?;
+    let rt = Builder::new_multi_thread().build()?;
     let _ = rt;
     Ok(())
 }
 ```
+
+##### current_thread
 
 > [!TIP] 上面是一个多线程的, 下面演示一个单线程运行时(类似Golang中的`runtime.GOMAXPROCS(1)`)
 
@@ -52,7 +110,24 @@ fn main() -> Result<(), std::io::Error> {
 
 ```
 
-### 使用宏
+
+#### `tokio::runtime::Runtime`
+
+> [!NOTE] 使用<u>默认配置</u>创建运行时
+
+```rust {title="需要features: rt-multi-thread"}
+use std::io;
+use tokio::runtime::Runtime;
+
+fn main() -> io::Result<()> {
+    let rt: Runtime = Runtime::new()?;	//  multi threaded scheduler, I/O driver, time
+
+    Ok(())
+}
+
+```
+
+### macro
 
 > [!NOTE] 推荐使用宏
 
@@ -133,6 +208,8 @@ fn main() {
     }
 }
 ```
+
+### `tokio::runtime::Handle`
 
 ## `tokio::time`
 
@@ -244,24 +321,46 @@ i: 3, instant: Instant { t: 17577.0124982s }
 i: 4, instant: Instant { t: 17578.0124982s }
 ```
 
-## `tokio::mpsc`
+## `tokio::sync`
+
+### `tokio::sync::mpsc`
 
 > [!NOTE] 多生产者单消费者异步通道
 > `tokio::mpsc`为异步任务通信提供了一个多生产者单消费者通道, 返回一个`Sender`和一个`Receiver`
 
-### Bounded Channel
+针对`BoundedChannel`和 `UnboundedChannel`的发送操作返回的错误都是 `tokio::sync::mpsc::SendError`
+
+```rust {wrapper=false, hl_lines=[2,12]}
+#[derive(PartialEq, Eq, Clone, Copy)]
+pub struct SendError<T>(pub T);
+
+impl<T> fmt::Debug for SendError<T> {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.debug_struct("SendError").finish_non_exhaustive()
+    }
+}
+
+impl<T> fmt::Display for SendError<T> {
+    fn fmt(&self, fmt: &mut fmt::Formatter<'_>) -> fmt::Result {
+        write!(fmt, "channel closed")
+    }
+}
+
+```
+
+#### Bounded Channel
 
 > [!TIP] 有界通道
 > 有界通道是指通道的缓冲区大小是有限的, 当通道满时, 生产者会阻塞, 直到有消费者消费数据
 
-#### Example1
+##### Example1
 
 ```rust {hl_lines=[5,10,20]}
 use tokio::sync::mpsc::{Receiver, Sender, channel};
 
 #[tokio::main]
 async fn main() {
-    let (tx, mut rx): (Sender<i32>, Receiver<i32>) = channel(100);
+    let (tx, mut rx): (Sender<i32>, Receiver<i32>) = channel(10);
 
     // 发送任务
     tokio::spawn(async move {
@@ -304,7 +403,7 @@ async fn main() {
 再次尝试接收任务: None
 ```
 
-#### Example2
+##### Example2
 
 > [!NOTE]
 > 既然是多生产者, 那么我们就可以克隆 `tx` 来创建多个发送者, 查看下面代码
@@ -345,17 +444,185 @@ async fn main() {
 }
 ```
 
-#### Example3
-
-> [!NOTE]
-> `mpsc::channel` 是一个有界通道, 它的缓冲区大小是有限的, 当通道满时, 生产者会阻塞当前task, 直到有消费者消费数据
-
-### Unbounded Channel
+#### Unbounded Channel
 
 > [!TIP] 无界通道
-> 无界通道是指通道的缓冲区大小是无限的, 当通道满时, 生产者会阻塞, 直到有消费者消费数据
+> 无界通道是指通道的缓冲区大小是无限的(可能会导致内存持续增长), `send`操作是同步的, 无需 `.await`
 
-## `tokio::sync`
+```rust {hl_lines=[5,9]}
+use tokio::sync::mpsc::unbounded_channel;
 
+#[tokio::main]
+async fn main() {
+    let (tx, mut rx) = unbounded_channel::<i32>();
+
+    tokio::spawn(async move {
+        for i in 0..5 {
+            if tx.send(i).is_err() {
+                break;
+            }
+        }
+    });
+
+    while let Some(msg) = rx.recv().await {
+        println!("{}", msg);
+    }
+}
+
+```
 > [!NOTE] 同步原语
 > `tokio::sync`为异步任务提供了很多同步原语, 熟悉Golang的可能会觉得很亲切 ![](/golang/walk.gif)
+
+
+### `tokio::sync::oneshot`
+
+`oneshot::channel`适用于一次性结果传递/单次通知
+
+> [!NOTE] 单次通知
+> `oneshot::channel`创建的通道, 发送端发送数据后, 接收端会收到数据, 然后关闭通道
+> `send`方法的函数签名是 `pub fn send(self, value: T) -> Result<(), T>` , 会获取所有权, 所以只能调用一次
+
+```rust {hl_lines=[5,8,13]}
+use tokio::sync::oneshot;
+
+#[tokio::main]
+async fn main() {
+    let (tx, rx) = oneshot::channel::<i32>();
+
+    tokio::spawn(async move {
+        if let Err(_) = tx.send(3) {
+            println!("the receiver dropped");
+        }
+    });
+
+    match rx.await {
+        Ok(v) => println!("got = {:?}", v),
+        Err(_) => println!("the sender dropped"),
+    }
+}
+```
+> [!NOTE] 发送端关闭
+> sender不发送数据直接drop时, 会关闭通道, 接收端会收到 `RecvError`
+> 如果发送前`drop(rx)`, 则发送端会收到 `Result::Err`
+
+```rust
+use tokio::sync::oneshot;
+
+#[tokio::main]
+async fn main() {
+    let (tx, rx) = oneshot::channel::<u32>();
+
+    tokio::spawn(async move {
+        drop(tx);
+    });
+
+    match rx.await {
+        Ok(_) => panic!("This doesn't happen"),
+        Err(err) => println!("the sender dropped: {}", err),
+    }
+}
+
+// the sender dropped: channel closed 
+```
+
+### `tokio::sync::broadcast`
+
+> 一个多生产者, 多消费者的广播队列. 每个发送的值, 所有消费者都会收到.
+
+- `drop(tx)` 关闭广播通道, 所有接收任务会收到 `RecvError::Closed` 错误
+- Lagged: 当接收方处理速度较慢时，发送方可能会因为缓冲区丢失消息, 接收方会收到 `RecvError::Lagged` 错误，标识接收方落后了多少条消息
+
+> [!NOTE] capacity的真实值可能会大于我们传入的值
+> 翻阅源码能发现有一条这样逻辑: `capacity = capacity.next_power_of_two();` // Round to a power of two
+
+#### EasyExample
+
+- <u>如果不等待两个任务，接收任务可能会在主程序退出前完成，因为接收速度较快，消息处理及时，所以能够观察到所有的输出结果.</u>
+- <u>如果接收方的处理逻辑较慢，主程序在发送完消息后提前退出，Tokio runtime 被丢弃，这会导致接收任务被中断，从而可能看不到所有的输出消息</u>
+ 
+```rust {hl_lines=[4,5,8,13,22]}
+use tokio::sync::broadcast;
+#[tokio::main]
+async fn main() {
+    let (tx, mut rx) = broadcast::channel(5);	// 容量为5
+    let mut rx2 = tx.subscribe();	// 创建第二个接收者
+	
+	// 启动2个异步任务
+    let recv_task = tokio::spawn(async move {
+        while let Ok(v) = rx.recv().await {
+            println!("recv {}", v);	`
+        }
+    });
+    let recv_task2 = tokio::spawn(async move {
+        while let Ok(v) = rx2.recv().await {
+            println!("recv {}", v);
+        }
+    });
+    for i in 1..=5 {
+        if let Ok(recv_num) = tx.send(i) {
+            println!("sent value: {}, receiver: {}", i, recv_num);
+        }
+    }
+    drop(tx);	// 关闭广播通道, 接收任务会收到 `RecvError::Closed` 错误，标识通道关闭，进而退出`while`循环
+    recv_task.await.unwrap(); // 为了确保所有接收任务能够正确完成并处理完所有消息，建议显式等待接收任务的完成
+    recv_task2.await.unwrap();// 使用 await 来保证主程序不会在接收任务完成之前退出
+}
+```
+
+#### LaggedExample
+
+```rust
+use tokio::sync::broadcast;
+use tokio::sync::broadcast::error::RecvError;
+
+#[tokio::main]
+async fn main() {
+    let (tx, mut rx1) = broadcast::channel::<i32>(3);
+    let task = tokio::spawn(async move {
+        loop {
+            match rx1.recv().await {
+                Ok(value) => println!("task received: {}", value),
+                Err(e) => match e {
+                    RecvError::Closed => {
+                        println!("task2: channel closed");
+                        break;
+                    }
+                    RecvError::Lagged(count) => {
+                        println!("task2: lagged, skipped {} messages", count);
+                    }
+                },
+            }
+        }
+    });
+    for i in 1..=10 {
+        if let Ok(recv_num) = tx.send(i) {
+            println!("sent value: {}, receiver: {}", i, recv_num);
+        }
+    }
+    drop(tx);
+    task.await.unwrap();
+}
+
+```
+
+需要注意的是下面的输出顺序并**不是固定**的, 在高亮的两行, 我们可以看到lagged和channel closed.
+
+```text {hl_lines=[12,17] wrapperClass="is-collapsed"}
+sent value: 1, receiver: 1
+sent value: 2, receiver: 1
+sent value: 3, receiver: 1
+sent value: 4, receiver: 1
+sent value: 5, receiver: 1
+sent value: 6, receiver: 1
+sent value: 7, receiver: 1
+sent value: 8, receiver: 1
+sent value: 9, receiver: 1
+sent value: 10, receiver: 1
+task received: 1
+task2: lagged, skipped 5 messages
+task received: 7
+task received: 8
+task received: 9
+task received: 10
+task2: channel closed
+```

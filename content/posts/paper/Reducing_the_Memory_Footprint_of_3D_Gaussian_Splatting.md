@@ -6,6 +6,7 @@ draft: false
 comment: true
 weight: 0
 featuredImage: /paper/reduced-3dgs/overview.jpg
+featuredImagePreview: /paper/reduced-3dgs/cover.png
 hiddenFromHomePage: false
 hiddenFromSearch: false
 hiddenFromRss: false
