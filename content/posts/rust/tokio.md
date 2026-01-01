@@ -129,7 +129,7 @@ fn main() -> io::Result<()> {
 
 ### macro
 
-> [!NOTE] 推荐使用宏
+> [!NOTE] 推荐使用宏, 屏蔽了上下文细节, 无需传递Runtime/Handle
 
 #### 单线程版本
 
@@ -210,6 +210,108 @@ fn main() {
 ```
 
 ### `tokio::runtime::Handle`
+
+> 一个不拥有运行时, 可以**克隆**, 可以**跨线程传递**的运行时句柄 
+
+#### 在同步函数中启动异步任务
+
+> 我们可以将`handle`传递到同步函数中
+
+```rust {hl_lines=[22]}
+use std::time::Duration;
+use tokio::runtime::{Handle, Runtime};
+use tokio::task::JoinHandle;
+
+fn sync_function(handle: &Handle) -> JoinHandle<()> {
+    println!("进入同步函数，准备调度异步任务");
+
+    handle.spawn(async {
+        let result = async_task().await;
+        println!("[异步任务执行结果]：{}", result);
+    })
+}
+
+async fn async_task() -> &'static str {
+    tokio::time::sleep(Duration::from_millis(100)).await;
+
+    "[ 异步任务完成 ]"
+}
+
+fn main() {
+    let rt = Runtime::new().unwrap();
+    let handle: &Handle = rt.handle();
+
+    // 同步上下文（main 同步代码）中调用同步函数，传递 Handle 调度异步任务
+    let handle = sync_function(handle);
+
+    rt.block_on(handle).expect("执行异步任务失败");
+}
+
+```
+
+#### 跨线程传递`handle`
+
+```rust {hl_lines=[10]}
+use std::thread;
+use std::time::Duration;
+use tokio::runtime::Builder;
+use tokio::time;
+
+fn main() -> Result<(), std::io::Error> {
+    let rt = Builder::new_multi_thread().enable_time().build()?;
+    let handle = rt.handle().clone();
+    let thread_handle = thread::spawn(move || {
+        // rt.spawn(async {  }); // 不能在这里使用 runtime 的 spawn 方法，因为 runtime move进来后, 外面就再也无法使用了
+        handle.spawn(async {
+            time::sleep(Duration::from_secs(1)).await;
+            println!(
+                "任务在Tokio运行时中执行, 但是定义在另一个线程中, 线程id: {:?}",
+                thread::current().id()
+            );
+        })
+    });
+    let task_handle = thread_handle.join().unwrap();
+
+    rt.block_on(task_handle)?;
+
+    Ok(())
+}
+
+```
+
+#### `Handle::current()`
+
+> 使用宏模式的时候, 通过 `Handle::current()` 获取handle
+
+```rust {hl_lines=[21]}
+use std::time::Duration;
+use tokio::runtime::Handle;
+use tokio::time;
+
+fn sync_function(handle: &Handle) {
+    println!("进入同步函数，准备通过 Handle 提交异步任务");
+    // 通过 Handle 提交异步任务
+    handle.spawn(async {
+        let result = async_task().await;
+        println!("同步函数提交的任务执行结果：{}", result);
+    });
+}
+
+async fn async_task() -> &'static str {
+    time::sleep(Duration::from_millis(500)).await;
+    "[异步任务完成]"
+}
+
+#[tokio::main]
+async fn main() -> Result<(), std::io::Error> {
+    let handle = Handle::current();
+    sync_function(&handle);
+    time::sleep(Duration::from_secs(1)).await;
+
+    Ok(())
+}
+
+```
 
 ## `tokio::time`
 
