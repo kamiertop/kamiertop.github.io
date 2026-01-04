@@ -38,6 +38,7 @@ flowchart TD
     tokio --> time
 ```
 
+{{<link "https://docs.rs/tokio/latest/tokio/index.html" "tokio" "" true>}}
 
 ## `tokio::runtime`
 
@@ -575,7 +576,6 @@ async fn main() {
 > [!NOTE] 同步原语
 > `tokio::sync`为异步任务提供了很多同步原语, 熟悉Golang的可能会觉得很亲切 ![](/golang/walk.gif)
 
-
 ### `tokio::sync::oneshot`
 
 `oneshot::channel`适用于一次性结果传递/单次通知
@@ -728,3 +728,33 @@ task received: 9
 task received: 10
 task2: channel closed
 ```
+
+## `tokio::signal`
+
+```mermaid
+flowchart TD
+    signal --> func("function: ctrl_c()")
+    signal --> mod_win[module: signal::windows]
+    signal --> mod_unix[module: signal::unix]
+```
+
+```rust
+use std::io;
+use tokio::signal;
+
+#[tokio::main]
+async fn main() -> io::Result<()> {
+    println!("waiting for Ctrl+C signal...");
+
+    signal::ctrl_c().await?;
+
+    println!("Ctrl+C signal received, exiting...");
+
+    Ok(())
+}
+
+```
+
+## 收获
+
+> [!SUCCESS] 对 `tokio` 有了大致了解, 也会读API文档了, 后面随着项目使用再更新, 接下来准备读一下调度相关的源码
