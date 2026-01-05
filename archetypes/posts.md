@@ -32,8 +32,9 @@ config:
 ```
 -->
 
+[//]: # (https://gohugo.io/content-management/syntax-highlighting/#linenos)
 <!--
-```js {wrapperClass="is-expanded is-collapsed" wrapper=true name="name" title="title"}
+```js {wrapperClass="is-expanded is-collapsed" lineNos=false wrapper=true name="name" title="title"}
 
 ```
 
