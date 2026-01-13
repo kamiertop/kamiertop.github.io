@@ -41,10 +41,17 @@ posts = "/posts/:title/"
 #      divided = false
 [menu]
   [[menu.main]]
+    identifier = "Home"
+    name = "首页"
+    url = "/"
+    weight = 1
+    [menu.main.params]
+      icon = "fa-solid fa-house"
+  [[menu.main]]
     identifier = "posts"
     name = "文章"
     url = "/posts/"
-    weight = 1
+    weight = 2
     [menu.main.params]
       icon = "fa-solid fa-archive"
   [[menu.main]]
@@ -52,16 +59,16 @@ posts = "/posts/:title/"
     name = "分类"
     url = "/categories/"
 #    parent = "posts" 仅用来记录如何添加子文档
-    weight = 2
+    weight = 3
     [menu.main.params]
       icon = "fa-solid fa-folder-tree "
-  # [[menu.main]]
-  #   identifier = "tags"
-  #   name = "标签"
-  #   url = "/tags/"
-  #   weight = 3
-  #   [menu.main.params]
-  #     icon = "fa-solid fa-tags fa-fw fa-sm"
+   [[menu.main]]
+     identifier = "tags"
+     name = "标签"
+     url = "/tags/"
+     weight = 3
+     [menu.main.params]
+       icon = "fa-solid fa-tags fa-fw fa-sm"
   [[menu.main]]
     identifier = "friends"
     name = "友链"

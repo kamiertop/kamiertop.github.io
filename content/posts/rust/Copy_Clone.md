@@ -78,7 +78,7 @@ note: if `User` implemented `Clone`, you could clone the value
 > [!TIP]
 > 如果所有字段都实现了`Clone`, 那么`#[derive(Clone)]`会自动实现`Clone` trait
 
-```rust {hl_lines=[1,12,13] linenos=table}
+```rust {hl_lines=[1,12,13]}
 #[derive(Debug,Clone)]
 #[allow(unused)]
 struct User {
@@ -98,7 +98,7 @@ fn main() {
 
 ## 实现 `Copy`, 按`bits`复制, 非移动语义
 
-```rust {hl_lines=[1,12,13,14] linenos=table}
+```rust {hl_lines=[1,12,13,14]}
 #[derive(Debug,Clone,Copy)]
 #[allow(unused)]
 struct User {
