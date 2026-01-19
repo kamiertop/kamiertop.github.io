@@ -1,8 +1,8 @@
 ---
-title: BadgerDB
+title: 自顶向下阅读 BadgerDB 源码
 subtitle: ""
 date: 2026-01-11T20:27:34+08:00
-draft: true
+draft: false
 comment: true
 weight: 0
 hiddenFromHomePage: false
@@ -25,10 +25,13 @@ tags:
 
 <!--more-->
 
-- `BadgerDB` 是一个为 SSD 优化的基于事务的纯 `Go` 编写的嵌入式键值存储数据库。用法可以参考官方文档: [BadgerDB](https://github.com/dgraph-io/badger)
-- 作为一个菜鸡, 来阅读下 `BadgerDB` 的源码, 大概了解下它的实现原理
+> [!abstract] 前言
+> - [BadgerDB](https://github.com/dgraph-io/badger) 是一个为 SSD 优化的基于事务的纯 `Go` 编写的嵌入式键值存储数据库。用法可以参考[文档](https://dgraph-io.github.io/badger/quickstart.html)
+> - 作为一个菜鸡, 来阅读下 `BadgerDB` 的源码, 大概了解下它的实现原理
 
-## Open
+## `DB`
+
+### Open
 
 > 初始化配置和资源, 返回一个 `DB` 对象
 
@@ -49,7 +52,7 @@ func main() {
 }
 ```
 
-### 流程分析
+#### 流程分析
 
 1. 检查和设置选项
 2. 目录创建与锁定
@@ -64,11 +67,11 @@ func main() {
    - 非内存模式下启动 `waitOnGC`
    - `listenForupdates`
 
-## `Update`
+### `Update`
 
 > [!NOTE] BadgerDB 通过 `Update` 方法进行**写新数据**/**更新已有数据**/**删除数据**
 
-### 使用示例 
+#### 使用示例 
 
 > `Update` 方法接受一个 `func(txn *badger.Txn) error` 类型的参数, 用于在事务中进行写操作
 
@@ -84,9 +87,9 @@ func update(db *badger.DB) error {
 }
 ```
 
-### 流程分析
+#### 流程分析
 
-```go
+```go {hl_lines=[8,11,15]}
 func (db *DB) Update(fn func(txn *Txn) error) error {
 	if db.IsClosed() {
 		return ErrDBClosed
@@ -111,11 +114,11 @@ func (db *DB) Update(fn func(txn *Txn) error) error {
 4. 执行 `fn(txn *badger.Txn) error` 函数
 5. 提交事务
 
-## `View`
+### `View`
 
 > [!NOTE] BadgerDB 通过 `View` 方法进行**读数据**
 
-### 使用示例
+#### 使用示例
 
 ```go
 func view(db *badger.DB, key []byte) error {
@@ -130,9 +133,9 @@ func view(db *badger.DB, key []byte) error {
 }
 ```
 
-### 流程分析
+#### 流程分析
 
-```go
+```go {hl_lines=[5,11,13]}
 func (db *DB) View(fn func(txn *Txn) error) error {
 	if db.IsClosed() {
 		return ErrDBClosed
@@ -156,9 +159,6 @@ func (db *DB) View(fn func(txn *Txn) error) error {
 3. 执行 `fn(txn *badger.Txn) error` 函数
 
 > [!NOTE] 只读事务中只能进行读操作, 不能进行写操作
-
-
-
 
 ## `Txn`
 
@@ -202,7 +202,46 @@ type Txn struct {
    2. 如果获取成功, 判断下是否已经被删除或过期
 6. 构造 `item` 并返回
 
-### `txn.Set`
+### `txn.Set` / `txn.SetEntry`
+
+> 调用关系: `Set(key, val []byte) -> SetEntry(e *Entry) -> modify(e *Entry)`
+
+> [!INFO] 实现逻辑如下, 主要分为前置条件检查和缓冲区写入
+
+1. 判断当前事务类型, 是否是更新事务
+2. 判断当前事务是否已经被丢弃
+3. 判断插入的`key`是否为空, 从这里可以看出<u>不能**Set空的key**</u>
+4. 判断当前`key`是否包含内置的 `badgerPrefix`
+5. 判断当前`key`的大小是否大于`maxKeySize=65000`(写死的). 这个值是否有特殊含义尚不清楚
+6. 判断`value`的大小是否超过`ValueLogFileSize`
+7. 检查在**内存模式**下, `value`的大小是否超过了`value`的阈值
+8. 如果开启**冲突检测**, 记录`key`的哈希到`conflictKeys`这个集合中
+9. 如果当前key存在, 已经被写入过一次了, 并且旧版本和新版本不同(ManagedMode, 用户可以手动指定每一条写入的版本号, 这个是合法的), 将旧的entry保存到`duplicateWrites`中 
+10. 如果不存在或已经存在, 但是版本号相同, 将当前`key` 和 `entry` 写入缓冲区中(直接覆盖)
+
+> [!WARNING] 为了性能, 使用的是key和value的引用, 事务结束之前不能修改底层数组
 
 ### `txn.Delete`
+
+> 调用链: `Delete(key []byte) -> modify(e *Entry)`
+
+```go {lineNos=false}
+func (txn *Txn) Delete(key []byte) error {
+	e := &Entry{
+		Key:  key,
+		meta: bitDelete,   // 通过标记位来表示已被删除
+	}
+	return txn.modify(e)
+}
+```
+
+`Delete`操作比较简单, 需要注意的是注释中的一些点:
+
+- 在此时间戳之前的读取不受影响. 旧事务可以读到被删除之前的旧值, 新的读事务遇到这个带有`bitDelete`标记的最新版本也能知道被删除
+- 为了性能优化, 当前事务并没有复制 `key`, 而是持有引用, 所以当前事务结束之前, 不能修改key的底层数组 
+
+
+### `txn.Commit`
+
+[Update](#update) 和 [View](#view) 都是先创建事务, 然后执行`Set`,`Delete`,`Get`等, 最后提交事务. 接下来我们分析下如何创建, 销毁, 提交事务.
 
