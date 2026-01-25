@@ -1,5 +1,5 @@
 ---
-title: 自顶向下阅读 BadgerDB 源码
+title: 自顶向下探究 BadgerDB 实现
 subtitle: ""
 date: 2026-01-11T20:27:34+08:00
 draft: false
@@ -29,7 +29,7 @@ tags:
 > - [BadgerDB](https://github.com/dgraph-io/badger) 是一个为 SSD 优化的基于事务的纯 `Go` 编写的嵌入式键值存储数据库。用法可以参考[文档](https://dgraph-io.github.io/badger/quickstart.html)
 > - 作为一个菜鸡, 来阅读下 `BadgerDB` 的源码, 大概了解下它的实现原理
 
-## `DB`
+## `Overview`
 
 ### Open
 
@@ -71,92 +71,46 @@ func main() {
 
 > [!NOTE] BadgerDB 通过 `Update` 方法进行**写新数据**/**更新已有数据**/**删除数据**
 
-#### 使用示例 
-
-> `Update` 方法接受一个 `func(txn *badger.Txn) error` 类型的参数, 用于在事务中进行写操作
-
-```go {hl_lines=[3,7]}
-func update(db *badger.DB) error {
-    return db.Update(func(txn *badger.Txn) error {
-        err := txn.Delete([]byte("delete_key"))
-        if err != nil {
-            return err
-        }
-        return txn.Set([]byte("insert_or_update_key"),[]byte("value"))
-    })
-}
-```
-
-#### 流程分析
-
 ```go {hl_lines=[8,11,15]}
 func (db *DB) Update(fn func(txn *Txn) error) error {
-	if db.IsClosed() {
+	if db.IsClosed() {             // 如果已经关闭, 直接返回错误
 		return ErrDBClosed
 	}
-	if db.opt.managedTxns {
+	if db.opt.managedTxns {        // 如果处于自动模式, 直接panic, 因为 Update 方法只能在自动模式下使用
 		panic("Update can only be used with managedDB=false.")
 	}
-	txn := db.NewTransaction(true)
+	txn := db.NewTransaction(true)  // 新建事务
 	defer txn.Discard()
 
-	if err := fn(txn); err != nil {
+	if err := fn(txn); err != nil { // 执行用户逻辑
 		return err
 	}
 
-	return txn.Commit()
+	return txn.Commit()             // 提交事务
 }
 ```
-
-1. 检查是否 `db` 是否已经关闭
-2. 如果处于托管事务模式, 直接panic, 因为 `Update` 方法只能在 非托管模式下使用
-3. 创建`非只读事务` `txn`
-4. 执行 `fn(txn *badger.Txn) error` 函数
-5. 提交事务
 
 ### `View`
 
 > [!NOTE] BadgerDB 通过 `View` 方法进行**读数据**
 
-#### 使用示例
-
-```go
-func view(db *badger.DB, key []byte) error {
-    return db.View(func(txn *badger.Txn) error {
-        _, err := txn.Get(key)
-        if err != nil {
-            return err
-        }
-
-        return nil
-    })
-}
-```
-
-#### 流程分析
 
 ```go {hl_lines=[5,11,13]}
 func (db *DB) View(fn func(txn *Txn) error) error {
-	if db.IsClosed() {
+	if db.IsClosed() {             // 如果已经关闭, 直接返回错误
 		return ErrDBClosed
 	}
 	var txn *Txn
-	if db.opt.managedTxns {
+	if db.opt.managedTxns {        // 如果处于自动模式, 调用 `NewTransactionAt` 创建**只读事务**
 		txn = db.NewTransactionAt(math.MaxUint64, false)
-	} else {
+	} else {                      // 如果处于手动模式, 调用 `NewTransaction` 创建**只读事务**
 		txn = db.NewTransaction(false)
 	}
 	defer txn.Discard()
 
-	return fn(txn)
+	return fn(txn)                // 执行用户逻辑
 }
 ```
-
-1. 检查是否 `db` 是否已经关闭
-2. 检查是否处于托管模式
-   - 托管事务: 调用 `NewTransactionAt` 创建**只读事务**
-   - 非托管事务: 调用 `NewTransaction` 创建**只读事务**
-3. 执行 `fn(txn *badger.Txn) error` 函数
 
 > [!NOTE] 只读事务中只能进行读操作, 不能进行写操作
 
@@ -164,18 +118,18 @@ func (db *DB) View(fn func(txn *Txn) error) error {
 
 ```go {name="https://github.com/dgraph-io/badger/blob/main/txn.go"}
 type Txn struct {
-	readTs   uint64
+	readTs   uint64  // 定义了事务能"看到"的数据版本范围, 确保事务读取的是一致的快照
 	commitTs uint64
 	size     int64
 	count    int64
 	db       *DB
 
 	reads []uint64 // contains fingerprints of keys read.
-	// contains fingerprints of keys written. This is used for conflict detection.
-	conflictKeys map[uint64]struct{}
+	
+	conflictKeys map[uint64]struct{} // 保存写入的key的指纹, 用来做冲突检测.
 	readsLock    sync.Mutex // guards the reads slice. See addReadKey.
-
-	pendingWrites   map[string]*Entry // cache stores any writes done by txn.
+   
+	pendingWrites   map[string]*Entry // 缓存待提交的数据.
 	duplicateWrites []*Entry          // Used in managed mode to store duplicate entries.
 
 	numIterators atomic.Int32
@@ -187,20 +141,34 @@ type Txn struct {
 
 ### `txn.Get`
 
-方法签名: `func (txn *Txn) Get(key []byte) (item *Item, rerr error)`
-
-1. 使用 `len(key) == 0` 一并处理 `[]byte{}` 和 `nil` 这两种情况
-2. 如果事务被丢弃, 返回 `ErrDiscardedTxn` 错误
-3. 判断key是否是被ban掉的key: `bannedNsKey  = []byte("!badger!banned")`
-4. 如果事务是可写事务, 
-   1. 如果在写缓存 `pendingWrites`中查找相同的key, 并且相等
-      1. 如果已经被删除或过期, 返回 `ErrKeyNotFound` 错误
-      2. 构造`item`并返回. 值得注意的是这里标记了一个状态: `item.status = prefetched`
-   2. 记录这次读操作
-5. 将 `key` 构造为内部带时间戳的查找key, 从存储层db中查找
-   1. 如果获取失败, 返回错误
-   2. 如果获取成功, 判断下是否已经被删除或过期
-6. 构造 `item` 并返回
+```go
+func (txn *Txn) Get(key []byte) (item *Item, rerr error) {
+	// 是否为空
+	// 是否已经被丢弃
+	// 是否被禁用
+	item = new(Item)
+	if txn.update {
+	    // 如果是更新事务, 先检查是否在缓存中, 如果在缓存中并且命中
+		if e, has := txn.pendingWrites[string(key)]; has && bytes.Equal(key, e.Key) {
+			if isDeletedOrExpired(e.meta, e.ExpiresAt) { // 如果缓存中的值已经过期/或者被删除, 直接返回错误
+				return nil, ErrKeyNotFound
+			}
+			// 设置item的一些属性然后返回
+			return item, nil
+		}
+		txn.addReadKey(key) // 将key添加到reads中, 用于冲突检测
+	}
+    // 构造查询key, 从数据库中查找这个 key 在 readTs 时间点的最新有效版本
+    // 确保事务内的所有读取都基于同一个时间点的快照
+	seek := y.KeyWithTs(key, txn.readTs)
+	vs, err := txn.db.get(seek) // 从db中查找
+	// 判断err, vs的一些状态
+	
+    // 构造item, 设置属性并返回
+	
+	return item, nil
+}
+```
 
 ### `txn.Set` / `txn.SetEntry`
 
@@ -208,17 +176,26 @@ type Txn struct {
 
 > [!INFO] 实现逻辑如下, 主要分为前置条件检查和缓冲区写入
 
-1. 判断当前事务类型, 是否是更新事务
-2. 判断当前事务是否已经被丢弃
-3. 判断插入的`key`是否为空, 从这里可以看出<u>不能**Set空的key**</u>
-4. 判断当前`key`是否包含内置的 `badgerPrefix`
-5. 判断当前`key`的大小是否大于`maxKeySize=65000`(写死的). 这个值是否有特殊含义尚不清楚
-6. 判断`value`的大小是否超过`ValueLogFileSize`
-7. 检查在**内存模式**下, `value`的大小是否超过了`value`的阈值
-8. 如果开启**冲突检测**, 记录`key`的哈希到`conflictKeys`这个集合中
-9. 如果当前key存在, 已经被写入过一次了, 并且旧版本和新版本不同(ManagedMode, 用户可以手动指定每一条写入的版本号, 这个是合法的), 将旧的entry保存到`duplicateWrites`中 
-10. 如果不存在或已经存在, 但是版本号相同, 将当前`key` 和 `entry` 写入缓冲区中(直接覆盖)
+```go
+func (txn *Txn) modify(e *Entry) error {
+	const maxKeySize = 65000
 
+    // 一系列检测: 是否是更新事务, 是否被丢弃, key的长度为否为0, 是否大于maxKeySize, value的大小是否大于配置
+	// txn.db.isBanned(e.Key), txn.checkSize(e)
+
+	if txn.db.opt.DetectConflicts { // 如果开启冲突检测, 则记录下当前写入的key的指纹, 比较轻量
+		fp := z.MemHash(e.Key) // Avoid dealing with byte arrays.
+		txn.conflictKeys[fp] = struct{}{}
+	}
+	// 如果当前事务中已经存在了相同key的entry, 并且版本不同, 则将旧的entry添加到duplicateWrites中
+	if oldEntry, ok := txn.pendingWrites[string(e.Key)]; ok && oldEntry.version != e.version {
+		txn.duplicateWrites = append(txn.duplicateWrites, oldEntry)
+	}
+	txn.pendingWrites[string(e.Key)] = e // 将entry写入到pendingWrites中
+	return nil
+}
+
+```
 > [!WARNING] 为了性能, 使用的是key和value的引用, 事务结束之前不能修改底层数组
 
 ### `txn.Delete`
@@ -245,3 +222,119 @@ func (txn *Txn) Delete(key []byte) error {
 
 [Update](#update) 和 [View](#view) 都是先创建事务, 然后执行`Set`,`Delete`,`Get`等, 最后提交事务. 接下来我们分析下如何创建, 销毁, 提交事务.
 
+```go {title="Txn.Commit"}
+func (txn *Txn) Commit() error {
+	// 关闭冲突检测时, conflictKeys为空, 还要检测这个pendingWrites, 索性直接检测 pendingWrites 是否为空
+	if len(txn.pendingWrites) == 0 {
+		// pendingWrites 为空, 说明当前事务没有进行任何写操作, 可能是读事务或者没有操作, 直接释放资源就可以.
+		txn.Discard()
+		return nil
+	}
+	// 检查是否被丢弃, 或者在自动模式下是否正确设置了时间戳
+	if err := txn.commitPrecheck(); err != nil {
+		return err
+	}
+	defer txn.Discard()
+   
+	txnCb, err := txn.commitAndSend()
+	if err != nil {
+		return err
+	}
+	// If batchSet failed, LSM would not have been updated. So, no need to rollback anything.
+
+	// TODO: What if some of the txns successfully make it to value log, but others fail.
+	// Nothing gets updated to LSM, until a restart happens.
+	return txnCb()
+}
+```
+
+```go {title="Txn.commitAndSend"}
+func (txn *Txn) commitAndSend() (func() error, error) {
+	orc := txn.db.orc
+	orc.writeChLock.Lock() // 加锁, 确保事务获取提交时间戳的顺序与被推送到写入通道中的顺序一样
+	defer orc.writeChLock.Unlock()
+
+	commitTs, conflict := orc.newCommitTs(txn)  // 检查之前看过的数据是否仍然有效
+	if conflict {
+		return nil, ErrConflict
+	}
+
+	keepTogether := true
+	setVersion := func(e *Entry) {
+		if e.version == 0 {
+			e.version = commitTs
+		} else {
+			keepTogether = false
+		}
+	}
+	// 给所有待写入的数据分配版本号
+	for _, e := range txn.pendingWrites {
+		setVersion(e)
+	}
+	// The duplicateWrites slice will be non-empty only if there are duplicate
+	// entries with different versions.
+	for _, e := range txn.duplicateWrites {
+		setVersion(e)
+	}
+
+	entries := make([]*Entry, 0, len(txn.pendingWrites)+len(txn.duplicateWrites)+1)
+
+	processEntry := func(e *Entry) {
+		// Suffix the keys with commit ts, so the key versions are sorted in
+		// descending order of commit timestamp.
+		e.Key = y.KeyWithTs(e.Key, e.version)
+		// Add bitTxn only if these entries are part of a transaction. We
+		// support SetEntryAt(..) in managed mode which means a single
+		// transaction can have entries with different timestamps. If entries
+		// in a single transaction have different timestamps, we don't add the
+		// transaction markers.
+		if keepTogether {
+			e.meta |= bitTxn
+		}
+		entries = append(entries, e)
+	}
+
+	// The following debug information is what led to determining the cause of
+	// bank txn violation bug, and it took a whole bunch of effort to narrow it
+	// down to here. So, keep this around for at least a couple of months.
+	// var b strings.Builder
+	// fmt.Fprintf(&b, "Read: %d. Commit: %d. reads: %v. writes: %v. Keys: ",
+	// 	txn.readTs, commitTs, txn.reads, txn.conflictKeys)
+	for _, e := range txn.pendingWrites {
+		processEntry(e)
+	}
+	for _, e := range txn.duplicateWrites {
+		processEntry(e)
+	}
+
+	if keepTogether {
+		// CommitTs should not be zero if we're inserting transaction markers.
+		y.AssertTrue(commitTs != 0)
+		e := &Entry{
+			Key:   y.KeyWithTs(txnKey, commitTs),
+			Value: []byte(strconv.FormatUint(commitTs, 10)),
+			meta:  bitFinTxn,
+		}
+		entries = append(entries, e)
+	}
+    // 从一个requestPool中获取一个请求, 将entries放入req中, 最后将req发送到通道 writeCh 中
+	req, err := txn.db.sendToWriteCh(entries)   
+	if err != nil {
+		orc.doneCommit(commitTs)
+		return nil, err
+	}
+	ret := func() error {
+		err := req.Wait()
+		// Wait before marking commitTs as done.
+		// We can't defer doneCommit above, because it is being called from a
+		// callback here.
+		orc.doneCommit(commitTs)
+		return err
+	}
+	return ret, nil
+}
+```
+
+## `DB`
+
+上面写了读写数据的API, 接下来分析如何从DB的结构以及如何从中读写数据.
