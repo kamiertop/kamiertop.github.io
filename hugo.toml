@@ -9,6 +9,7 @@ titleCaseStyle = "none"
 # 更改使用 Hugo 构建网站时使用的默认主题
 theme = "FixIt"
 enableEmoji = true
+ignoreLogs = ["warning-remote-image"]
 
 [permalinks]
 posts = "/posts/:title/"
@@ -162,7 +163,7 @@ posts = "/posts/:title/"
     titleCaseStyle = "ap"
     [params.page.math]
       enable = true
-      type = "katex"
+      type = "mathjax"
       errorColor = "#ff4949"
       [params.page.math.katex]
         copyTex = true
