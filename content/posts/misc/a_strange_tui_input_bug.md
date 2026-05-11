@@ -25,6 +25,6 @@ categories:
 - Terminal：[Ghostty](https://ghostty.org/)
 - Agent工具：Codex、ClaudeCode
 - 问题：输入中文时直接崩溃退出
-- 解决办法：`env GTK_IM_MODULE=wayland ghostty`，在新启动的终端中执行`codex`/`claude`，输入中文一切正常，随后不设置环境变量都可以了
+- 解决办法（GPT大人）：`env GTK_IM_MODULE=wayland ghostty`，在新启动的终端中执行`codex`/`claude`，输入中文一切正常，随后不设置环境变量都可以了
 - 原因：不知道，很奇怪...
 - 其他终端中是否尝试：未尝试
