@@ -1,5 +1,5 @@
 ---
-title: Fedora JetBrains IDE 乱码
+title: Fedora44 JetBrains IDE 乱码
 subtitle: ""
 date: 2026-05-06T20:02:25+08:00
 draft: false
@@ -17,8 +17,11 @@ lightgallery: false
 summary: "Fedora 安装 JetBrains 时乱码解决方案"
 categories:
   - misc
-# See details front matter: https://fixit.lruihao.cn/documentation/content-management/introduction/#front-matter
-# 图标支持：https://fixit.lruihao.cn/zh-cn/documentation/content-management/diagrams-support/mermaid/
+tags:
+  - IDE
+  - JetBrains
+  - Fedora44
+  - Font
 ---
 
 # Fedora 中安装 JetBrains IDE 乱码解决方案
