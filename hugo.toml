@@ -12,7 +12,7 @@ enableEmoji = true
 ignoreLogs = ["warning-remote-image"]
 
 [permalinks]
-posts = "/posts/:title/"
+posts = "/posts/:contentbasename/"
 
 #[menu]
 #  [[menu.main]]
