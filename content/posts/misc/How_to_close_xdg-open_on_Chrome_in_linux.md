@@ -22,8 +22,6 @@ tags:
   - xdg-open
 ---
 
-# Linux中关闭使用Chrome时网站弹出的xdg-open提示
-
 ## 问题描述
 
 > [!abstract]
