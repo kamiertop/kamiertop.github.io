@@ -23,6 +23,9 @@ tags:
   - SIGSEGV
 ---
 
+> [!warning]
+> 下面的内容不能完全修复，重启之后还是会遇到，我已选择 [kitty](https://sw.kovidgoyal.net/kitty/)
+
 ## 环境
 
 - OS: Fedora 44
