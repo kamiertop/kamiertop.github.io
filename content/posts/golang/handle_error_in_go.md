@@ -79,3 +79,38 @@ func (s Scaffold) loadModelFromFile(path string) (f *File, err error) {
 ```
 
 更加完善的错误方式，可以在defer中使用 `errors.Join` 来合并错误
+
+```go {noClasses=true style="emacs"}
+package main
+import (
+    "errors"
+    "fmt"
+    "os"    
+)
+func doSomething() (err error) {
+	err = os.ErrExist
+	defer func() {
+		// a new error occurred during cleanup
+		cleanupErr := os.ErrClosed
+		// var cleanupErr error = nil 即使是nil，也不影响原来的错误
+		// combine the original error with the cleanup error
+		err = errors.Join(err, cleanupErr)
+	}()
+
+	return err
+}
+
+func main() {
+	err := doSomething()
+	// 使用errors.Is来判断错误
+	// 或者使用 errors.As
+	// 或者使用 errors.AsType
+	if errors.Is(err, os.ErrExist) {
+		fmt.Println("original error: os.ErrExist")
+	}
+	if errors.Is(err, os.ErrClosed) {
+		fmt.Println("original error: os.ErrClosed")
+	}
+}
+
+```

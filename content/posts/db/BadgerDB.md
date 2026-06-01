@@ -2,7 +2,7 @@
 title: 自顶向下探究 BadgerDB 实现
 subtitle: ""
 date: 2026-01-11T20:27:34+08:00
-draft: false
+draft: true
 comment: true
 weight: 0
 hiddenFromHomePage: false
@@ -16,11 +16,11 @@ math: true
 lightgallery: false
 summary: ""
 categories:
-  - DB
+  - db
   - Go
 tags:
   - Go
-  - DB
+  - db
 ---
 
 <!--more-->
