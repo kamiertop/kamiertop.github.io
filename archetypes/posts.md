@@ -32,7 +32,7 @@ config:
 ```
 -->
 
-[//]: # (https://gohugo.io/content-management/syntax-highlighting/#linenos)
+[//]: # "https://gohugo.io/content-management/syntax-highlighting/#linenos"
 <!--
 ```js {wrapperClass="is-expanded is-collapsed" lineNos=false wrapper=true name="name" title="title"}
 
@@ -40,15 +40,20 @@ config:
 
 -->
 
-<!--paper [^1]
+<!--
+
+paper [^1]
 label [^label]
 
 
 [^1]: https://cs-people.bu.edu/mathan/reading-groups/papers-classics/recovery.pdf
-[^label]: 标签-->
+[^label]: 标签
+
+-->
 
 <!--![Alt text](https://octodex.github.com/images/spidertocat.png "The Spidertocat")-->
 
-
 <!--图片-->
 <!--https://fixit.lruihao.cn/zh-cn/documentation/content-management/shortcodes/extended/introduction/#image-->
+
+<!--https://fixit.lruihao.cn/zh-cn/documentation/content-management/markdown-syntax/extended/#extended-syntax-->

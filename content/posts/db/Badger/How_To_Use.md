@@ -22,6 +22,8 @@ categories:
 
 [BadgerDB](https://github.com/dgraph-io/badger)是一个Go语言编写、支持事务的、可嵌入持久化的快速键值数据库。本系列用来学习BadgerDB的使用，以及BadgerDB的底层实现原理
 
+> [!abstract] 以下内容参考官方文档示例、并且演示代码都基于**管理模式**，非管理模式用于构建新的数据库
+
 ## 安装
 
 - 库：`go get github.com/dgraph-io/badger/v4`
@@ -366,7 +368,7 @@ func main() {
 
 ### 默认参数
 
-```go
+```go {hl_lines=[20,21,23] wrapperClass="is-collapsed"}
 package main
 
 import (
@@ -405,7 +407,6 @@ func main() {
 		log.Printf("view error: %v", err)
 	}
 }
-
 ```
 
 ### 自定义迭代器配置
@@ -425,7 +426,7 @@ var DefaultIteratorOptions = IteratorOptions{
 
 > 使用 `Seek` 来寻找第一个符合条件的key
 
-```go {hl_lines=[]}
+```go {hl_lines=[35,38]}
 package main
 
 import (
@@ -906,6 +907,8 @@ func seed(db *badger.DB) error {
 ```
 
 ## 单调递增整数
+
+> 获取唯一单调递增整数，线程安全，可以通过`goroutine`并发获取，支持预占用一批整数，重启后不会从头开始，而是接着上次的整数继续递增
 
 ```go
 package main
