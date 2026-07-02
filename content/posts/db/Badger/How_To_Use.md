@@ -62,7 +62,7 @@ func main(){
 
 使用 badger.Open 打开一个持久化数据库之后，只有一个进程/Goroutine 可以访问这个数据库，如果另一个进程/Goroutine 试图打开同一个数据库，就会报错，提示数据库被锁定了
 
-```go {hl_lines=["21-30"] wrapperClass="is-collapsed"}
+```go {hl_lines=["21-30"] wrapper_class="is-collapsed"}
 package main
 
 import (
@@ -98,7 +98,7 @@ func main() {
 
 ```
 
-```text {hl_lines=[4] wrapperClass="is-collapsed"}
+```text {hl_lines=[4] wrapper_class="is-collapsed"}
 badger 2026/06/01 09:58:16 INFO: All 0 tables opened in 0s
 badger 2026/06/01 09:58:16 INFO: Discard stats nextEmptySlot: 0
 badger 2026/06/01 09:58:16 INFO: Set nextTxnTs to 0
@@ -368,7 +368,7 @@ func main() {
 
 ### 默认参数
 
-```go {hl_lines=[20,21,23] wrapperClass="is-collapsed"}
+```go {hl_lines=[20,21,23] wrapper_class="is-collapsed"}
 package main
 
 import (

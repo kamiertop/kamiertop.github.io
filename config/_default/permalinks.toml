@@ -1,0 +1,14 @@
+# -------------------------------------------------------------------------------------
+# Permalinks Configuration
+# See: https://gohugo.io/content-management/urls/#permalinks
+# -------------------------------------------------------------------------------------
+
+[page]
+posts = "/posts/:contentbasename/"
+
+[section]
+# posts = "/posts/:slugorcontentbasename"
+
+[taxonomy]
+
+[term]

@@ -1,0 +1,29 @@
+# -------------------------------------------------------------------------------------
+# Hugo Configuration
+# See: https://gohugo.io/configuration/all/
+# -------------------------------------------------------------------------------------
+
+# website title
+title = "KamiertopのBlogSite"
+# Hostname (and path) to the root
+baseURL = "https://www.kamier.top"
+# determines default content language ["en", "zh-cn", "fr", "pl", ...]
+defaultContentLanguage = "zh-cn"
+# language locale ["en", "zh-CN", "fr", "pl", ...]
+locale = "zh-CN"
+# whether to include Chinese/Japanese/Korean
+hasCJKLanguage = true
+# date format
+dateFormat = "2006-01-02"
+# title case style
+titleCaseStyle = "none"
+# whether to use emoji code
+enableEmoji = true
+# whether to use robots.txt
+enableRobotsTXT = true
+# whether to use git commit log
+enableGitInfo = true
+# copyright description used only for seo schema
+copyright = ""
+# log level to ignore
+ignoreLogs = ["warning-remote-image"]

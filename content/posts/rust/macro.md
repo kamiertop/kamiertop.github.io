@@ -225,7 +225,7 @@ fn main() {
 - 后面是冒号 `:`
 - 最后是片段类型 `MacroFragSpec`: `block | expr | expr_2021 | ident | item | lifetime | literal | meta | pat | pat_param | path | stmt | tt | ty | vis`
 
-```rust {hl_lines=[3,13,21] wrapperClass="is-expanded is-collapsed"}
+```rust {hl_lines=[3,13,21] wrapper_class="is-expanded is-collapsed"}
 // m1!("abc"); m!("a literal");
 macro_rules! m1 {
     ($a: literal) => {
@@ -256,7 +256,7 @@ macro_rules! m3 {
 
 [重复运算符](https://doc.rust-lang.org/stable/reference/macros-by-example.html#r-macro.decl.repetition.operators)：`*`（零次或多次）、`+`（一次或多次）、`?`（零次或一次）
 
-```rust {wrapperClass="is-expanded is-collapsed" hl_lines=[7,9,14,3]}
+```rust {wrapper_class="is-expanded is-collapsed" hl_lines=[7,9,14,3]}
 macro_rules! my_vec {
     // 使用 , 分割, 重复0次或多次
     [$($x: expr),*] => {

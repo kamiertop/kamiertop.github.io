@@ -1,46 +1,58 @@
-{{- if strings.HasPrefix .Source "<link" -}}
+{{- if strings.HasPrefix (.Source | default "") "<link" -}}
   {{- safeHTML .Source -}}
 {{- else -}}
-  {{- $href := .Source -}}
+  {{- $href := "" -}}
   {{- $integrity := .Integrity -}}
-  {{- $resource := 0 -}}
-  {{- if $href | and (not (urls.Parse $href).Host) -}}
-    {{- $resource = resources.Get $href -}}
+
+  {{- with .Resource -}}
+    {{- $href = .RelPermalink -}}
+    {{- with .Data.Integrity -}}
+      {{- $integrity = . -}}
+    {{- end -}}
   {{- end -}}
-  {{- with .Content -}}
-    {{- $resource = resources.FromString $.Path . -}}
-  {{- end -}}
-  {{- if $resource -}}
+
+  {{- if .Source | and (not .Resource) | and (not (urls.Parse .Source).Host) -}}
+    {{- $resource := resources.Get .Source -}}
     {{- with .Template -}}
-      {{- $resource = $resource | resources.ExecuteAsTemplate . $.Context -}}
+      {{- $resource = resources.ExecuteAsTemplate . $.Context $resource -}}
     {{- end -}}
-    {{- with .ToCSS -}}
-      {{- $options := . | merge (dict "outputStyle" "compressed" "transpiler" "dartsass" "silenceDeprecations" (slice "import" "global-builtin" "color-functions" "function-units" "if-function")) -}}
-      {{- $resource = $resource | toCSS $options -}}
-    {{- end -}}
-    {{- if .Minify -}}
-      {{- $resource = $resource | minify -}}
-    {{- end -}}
+    {{- $resource = dict "Resource" $resource "ToCSS" .ToCSS "Minify" .Minify "Fingerprint" .Fingerprint | partial "function/to-css.html" -}}
     {{- with .Fingerprint -}}
-      {{- $resource = $resource | fingerprint . -}}
       {{- $integrity = $resource.Data.Integrity -}}
     {{- end -}}
     {{- $href = $resource.RelPermalink -}}
   {{- end -}}
-  {{- $attrs := printf `href="%v"` $href -}}
-  {{- if .Crossorigin -}}
-    {{- $attrs = ` crossorigin="anonymous"` | add $attrs -}}
+
+  {{- if .Content | and .Path -}}
+    {{- $contentResource := resources.FromString .Path .Content -}}
+    {{- $contentResource = dict "Resource" $contentResource "ToCSS" .ToCSS "Minify" .Minify "Fingerprint" .Fingerprint | partial "function/to-css.html" -}}
+    {{- with .Fingerprint -}}
+      {{- $integrity = $contentResource.Data.Integrity -}}
+    {{- end -}}
+    {{- $href = $contentResource.RelPermalink -}}
   {{- end -}}
-  {{- with $integrity -}}
-    {{- $attrs = printf ` integrity="%v"` . | add $attrs -}}
+
+  {{- $href = $href | default .Source -}}
+  {{- if eq (printf "%v" $href) "<nil>" -}}
+    {{- $href = "" -}}
   {{- end -}}
-  {{- with .Attr -}}
-    {{- $attrs = add " " . | add $attrs -}}
-  {{- end -}}
-  {{- if .Preload -}}
-    <link rel="preload" {{ $attrs | safeHTMLAttr }} as="style" onload="this.removeAttribute('onload');this.rel='stylesheet'">
-    <noscript><link rel="stylesheet" {{ $attrs | safeHTMLAttr }}></noscript>
-  {{- else -}}
-    <link rel="stylesheet" {{ $attrs | safeHTMLAttr }}>
+
+  {{- with $href -}}
+    {{- $attrs := printf `href="%v"` . -}}
+    {{- if $.Crossorigin -}}
+      {{- $attrs = ` crossorigin="anonymous"` | add $attrs -}}
+    {{- end -}}
+    {{- with $integrity -}}
+      {{- $attrs = printf ` integrity="%v"` . | add $attrs -}}
+    {{- end -}}
+    {{- with $.Attr -}}
+      {{- $attrs = add " " . | add $attrs -}}
+    {{- end -}}
+    {{- if $.Preload -}}
+      <link rel="preload" {{ $attrs | safeHTMLAttr }} as="style" onload="this.removeAttribute('onload');this.rel='stylesheet'">
+      <noscript><link rel="stylesheet" {{ $attrs | safeHTMLAttr }}></noscript>
+    {{- else -}}
+      <link rel="stylesheet" {{ $attrs | safeHTMLAttr }}>
+    {{- end -}}
   {{- end -}}
 {{- end -}}

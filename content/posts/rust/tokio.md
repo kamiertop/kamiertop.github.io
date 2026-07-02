@@ -709,7 +709,7 @@ async fn main() {
 
 需要注意的是下面的输出顺序并**不是固定**的, 在高亮的两行, 我们可以看到lagged和channel closed.
 
-```text {hl_lines=[12,17] wrapperClass="is-collapsed"}
+```text {hl_lines=[12,17] wrapper_class="is-collapsed"}
 sent value: 1, receiver: 1
 sent value: 2, receiver: 1
 sent value: 3, receiver: 1
