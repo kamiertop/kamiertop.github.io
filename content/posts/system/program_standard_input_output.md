@@ -1,0 +1,59 @@
+---
+title: program_standard_input_output
+subtitle: ""
+date: 2026-07-02T20:26:18+08:00
+draft: true
+comment: true
+weight: 0
+hiddenFromHomePage: false
+hiddenFromSearch: false
+hiddenFromRss: false
+hiddenFromRelated: false
+description: ""
+toc: true
+lastmod: 2026-07-02T20:26:18+08:00
+math: true
+lightgallery: false
+summary: ""
+categories:
+  - system
+# See details front matter: https://fixit.lruihao.cn/documentation/content-management/introduction/#front-matter
+# 图标支持：https://fixit.lruihao.cn/zh-cn/documentation/content-management/diagrams-support/mermaid/
+---
+
+<!--more-->
+
+<!--
+```mermaid
+---
+config:
+  theme: 'default'
+---
+```
+-->
+
+[//]: # "https://gohugo.io/content-management/syntax-highlighting/#linenos"
+<!--
+```js {wrapperClass="is-expanded is-collapsed" lineNos=false wrapper=true name="name" title="title"}
+
+```
+
+-->
+
+<!--
+
+paper [^1]
+label [^label]
+
+
+[^1]: https://cs-people.bu.edu/mathan/reading-groups/papers-classics/recovery.pdf
+[^label]: 标签
+
+-->
+
+<!--![Alt text](https://octodex.github.com/images/spidertocat.png "The Spidertocat")-->
+
+<!--图片-->
+<!--https://fixit.lruihao.cn/zh-cn/documentation/content-management/shortcodes/extended/introduction/#image-->
+
+<!--https://fixit.lruihao.cn/zh-cn/documentation/content-management/markdown-syntax/extended/#extended-syntax-->
