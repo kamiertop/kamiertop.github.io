@@ -44,6 +44,12 @@ tooltip = true
 # You can turn it off, but we would really appreciate if you don’t, as this is a good way to watch FixIt's popularity on the rise.
 disable_theme_inject = false
 
+# Appearance Configuration
+# See: layouts/_partials/function/scss-vars.html in FixIt.
+[appearance]
+global_font_family = "system-ui, -apple-system, BlinkMacSystemFont, PingFang SC, Microsoft YaHei UI, Segoe UI, Roboto, Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, Helvetica, Arial, 'Nerd Font Symbols Blog', sans-serif"
+code_font_family = "Source Code Pro, Menlo, Consolas, Monaco, 'Nerd Font Symbols Blog', monospace"
+
 # Author Configuration
 [author]
   name = "kamiertop"
