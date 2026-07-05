@@ -1,5 +1,5 @@
 ---
-title: Cursor CLI HTTP Proxy 环境变量配置
+title: Cursor CLI HTTP Proxy 环境变量配置以及 Linux 环境变量学习
 date: 2026-06-11T17:09:25+08:00
 draft: false
 comment: true
@@ -17,7 +17,7 @@ summary: "在服务器中使用Cursor时正确配置环境变量以获得所有�
 categories:
   - system
 tags:
-  - linux
+  - Linux
   - env
 ---
 

@@ -17,7 +17,7 @@ categories:
 - 引擎: [Hugo](https://github.com/gohugoio/hugo)
 - 主题: [FixIt](https://github.com/hugo-fixit/FixIt)
 - 托管: **Github Pages**+自定义域名
-
+- 使用Hugo Modules管理主题, 方便更新主题，摒弃git submodule管理主题的方式
 
 ```go
 package main
