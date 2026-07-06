@@ -8,19 +8,19 @@ hiddenFromHomePage: false
 hiddenFromSearch: false
 hiddenFromRss: false
 hiddenFromRelated: false
-description: ""
 toc: true
 lastmod: 2026-07-05T20:12:14+08:00
 math: true
 lightgallery: false
-summary: "Go `sync.Once` 源码解读"
+summary: "`sync.Once` 用于并发场景下的只需要初始化一次的共享资源或初始化单例资源"
 categories:
   - Go
 tags:
   - Go
 ---
 
->[!abstract] Go 的 `sync.Once` 用于在并发场景下保证函数只执行一次，并且保证所有 `Do` 调用返回时初始化函数已经执行完成。本文从字段布局、快慢路径、double check、Mutex 等待语义，以及 amd64 下的指令长度优化几个角度解读它的源码实现
+>[!abstract] **version**：`go1.26`
+> Go 的 `sync.Once` 用于在并发场景下保证函数只执行一次，并且保证所有 `Do` 调用返回时初始化函数已经执行完成。本文从字段布局、快慢路径、double check、Mutex 等待语义，以及 amd64 下的指令长度优化几个角度解读它的源码实现
 
 ## 结构体
 
@@ -58,9 +58,10 @@ type Once struct {
 - 如果 `done` 字段为 `false`，说明操作还没有执行过，调用 `doSlow` 方法执行操作
 - 如果 `done` 字段为 `true`，说明操作已经执行过，直接返回，不再执行操作，后续所有的访问都不会进入 `doSlow` 方法，避免了锁的开销，是块路径（hot path）
 
-```go
+```go {hl_lines=[3]}
 func (o *Once) Do(f func()) {
 	if !o.done.Load() {
+		// 将核心逻辑移到doSlow，方便对快速路径进行内联
 		o.doSlow(f)
 	}
 }
@@ -128,6 +129,40 @@ sequenceDiagram
 
 第二次 `done.Load()` 必须放在拿到锁之后。因为两个 goroutine 可能同时通过 `Do` 方法里的第一次检查，第二个 goroutine 在等待锁期间，第一个 goroutine 已经执行完 `f()` 并把 `done` 设置为 `true`。如果没有第二次检查，第二个 goroutine 拿到锁后还会继续执行 `f()`。
 
+## 扩展
+
+{{< link href="https://github.com/kamiertop/syncx" content="syncx" card=true >}}
+
+```go
+func (o *Once) DoE(f func() error) error {
+    if !o.done.Load() {
+        return o.doSlowE(f)
+    }
+    
+    return nil
+}
+
+func (o *Once) doSlowE(f func() error) error {
+    o.m.Lock()
+    defer o.m.Unlock()
+    
+    if o.done.Load() {
+        return nil
+    }
+    
+    if err := f(); err != nil {
+        return err
+    }
+    
+    o.done.Store(true)
+    
+    return nil
+}
+
+func (o *Once) Done() bool {
+    return o.done.Load()
+}
+```
 
 ## 指令长度测试
 
