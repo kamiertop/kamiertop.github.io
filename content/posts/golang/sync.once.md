@@ -2,17 +2,16 @@
 title: Go sync.Once 源码解读
 date: 2026-07-05T20:12:14+08:00
 draft: false
-comment: true
 weight: 0
 hiddenFromHomePage: false
 hiddenFromSearch: false
 hiddenFromRss: false
 hiddenFromRelated: false
-toc: true
 lastmod: 2026-07-05T20:12:14+08:00
-math: true
 lightgallery: false
 summary: "`sync.Once` 用于并发场景下的只需要初始化一次的共享资源或初始化单例资源"
+collections:
+  - sync
 categories:
   - Go
 tags:

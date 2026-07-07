@@ -3,16 +3,13 @@ title: '{{ replace .TranslationBaseName "-" " " | title }}'
 #subtitle: ""
 date: '{{ .Date }}'
 draft: false
-comment: true
 weight: 0
 hiddenFromHomePage: false
 hiddenFromSearch: false
 hiddenFromRss: false
 hiddenFromRelated: false
 description: ""
-toc: true
 lastmod: '{{ .Date }}'
-math: true
 lightgallery: false
 summary: ""
 categories:

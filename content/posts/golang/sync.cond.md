@@ -2,7 +2,6 @@
 title: Go sync.Cond 源码解读
 date: 2026-07-06T14:23:12+08:00
 draft: false
-comment: true
 weight: 0
 hiddenFromHomePage: false
 hiddenFromSearch: false
@@ -13,6 +12,8 @@ lastmod: 2026-07-06T14:23:12+08:00
 math: true
 lightgallery: false
 summary: "`sync.Cond` 用于让一组 goroutine 等待某个共享状态满足条件，适合表达可重复发生的状态变化"
+collections:
+  - sync
 categories:
   - Go
 tags:
