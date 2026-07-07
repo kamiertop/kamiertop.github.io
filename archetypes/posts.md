@@ -1,7 +1,7 @@
 ---
-title: {{ replace .TranslationBaseName "-" " " | title }}
-subtitle: ""
-date: {{ .Date }}
+title: '{{ replace .TranslationBaseName "-" " " | title }}'
+#subtitle: ""
+date: '{{ .Date }}'
 draft: false
 comment: true
 weight: 0
@@ -11,11 +11,13 @@ hiddenFromRss: false
 hiddenFromRelated: false
 description: ""
 toc: true
-lastmod: {{ .Date }}
+lastmod: '{{ .Date }}'
 math: true
 lightgallery: false
 summary: ""
 categories:
+  -
+tags:
   -
 # See details front matter: https://fixit.lruihao.cn/documentation/content-management/introduction/#front-matter
 # 图标支持：https://fixit.lruihao.cn/zh-cn/documentation/content-management/diagrams-support/mermaid/

@@ -21,6 +21,10 @@ images = []
 # FixIt 0.2.12 | NEW enable PWA
 capitalize_titles = true
 # FixIt 0.2.14 | NEW whether to add external Icon for external links automatically
+
+# Collection sidebar and post-footer collection navigation.
+collection_list = true
+
 [link]
 external_icon = true
 # FixIt 0.3.0 | NEW whether to add site title to the title of every page
@@ -53,7 +57,7 @@ code_font_family = "Source Code Pro, Menlo, Consolas, Monaco, 'Nerd Font Symbols
 # Author Configuration
 [author]
   name = "kamiertop"
-  email = ""
+  email = "kamiertop@gmail.com"
   link = ""
   avatar = "/avatar.png"
 
@@ -305,7 +309,7 @@ paginate = 10
 
 # FixIt 0.2.16 | CHANGED Social config about the author
 [social]
-GitHub = ""
+GitHub = "https://github.com/kamiertop"
 Linkedin = ""
 Twitter = ""
 Instagram = ""
@@ -392,7 +396,7 @@ TikTok = ""
 Credly = ""
 Bluesky = ""
 Phone = ""
-Email = ""
+Email = "kamiertop@gmail.com"
 RSS = false
 
 [social.github]
@@ -790,6 +794,111 @@ expand_details = true
 # whether to expand all file trees before printing
 expand_file_tree = false
 
+# Global page feature defaults used by FixIt v0.4.6+.
+[toc]
+enable = true
+keep_static = false
+auto = true
+position = "right"
+ordered = false
+start_level = 2
+end_level = 6
+decrease_h1 = false
+
+[math]
+enable = true
+type = "mathjax"
+error_color = "#ff4949"
+
+[math.katex]
+copy_tex = true
+throw_on_error = false
+error_color = "#ff4949"
+
+[math.katex.macros]
+# "\\f" = "#1f(#2)" # usage: $\f{a}{b}$
+
+[math.mathjax]
+cdn = "https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"
+
+[math.mathjax.packages]
+# "[+]" = ["configmacros"]
+
+[math.mathjax.macros]
+# bold = ["{\\bf #1}", 1] # usage: $\bold{math}$
+
+[math.mathjax.loader]
+load = [ "ui/safe" ]
+
+[math.mathjax.loader.paths]
+# custom = "https://cdn.jsdelivr.net/gh/sonoisa/XyJax-v3@3.0.1/build/"
+
+[math.mathjax.options]
+enable_menu = true
+skip_html_tags = [
+  "script",
+  "noscript",
+  "style",
+  "textarea",
+  "pre",
+  "code",
+  "math",
+  "select",
+  "option",
+  "mjx-container"
+]
+ignore_html_class = "mathjax_ignore"
+
+[math.mathjax.options.include_html_tags]
+# "#comment" = ""
+# br = "\n"
+# wbr = ""
+
+[related]
+enable = false
+count = 5
+position = [ "aside" ]
+
+[share]
+enable = false
+Twitter = true
+Facebook = true
+Linkedin = false
+Whatsapp = false
+Pinterest = false
+Tumblr = false
+HackerNews = false
+Reddit = false
+VK = false
+Buffer = false
+Xing = false
+Line = false
+Instapaper = false
+Pocket = false
+Flipboard = false
+Weibo = true
+Myspace = false
+Blogger = false
+Baidu = false
+Odnoklassniki = false
+Evernote = false
+Skype = false
+Trello = false
+Mix = false
+
+# FixIt v0.4.6+ reads comment settings from the top-level params.comment table.
+[comment]
+enable = true
+
+[comment.utterances]
+enable = true
+# owner/repo
+repo = "kamiertop/kamiertop.github.io"
+issue_term = "pathname"
+label = "comment"
+light_theme = "github-light"
+dark_theme = "github-dark"
+
 # FixIt 0.3.12 | NEW Custom partials config
 # Custom partials must be stored in the /layouts/_partials/ directory.
 # Depends on open custom blocks https://fixit.lruihao.cn/references/blocks/
@@ -820,8 +929,9 @@ c4u = false
 # FixIt 0.4.0 | NEW Enable debug mode
 debug = false
 
-# Page config
-# TODO migrate mapping key to `params` layer in the future
+# Legacy page config kept for older FixIt compatibility.
+# For current FixIt v0.4.6+ global defaults, prefer the top-level tables above,
+# e.g. [toc], [math], [related], [share], [comment].
 [page]
 # FixIt 0.2.18 | NEW whether to enable the author's avatar of the post
 author_avatar = true
@@ -852,7 +962,7 @@ license = '<a rel="license external nofollow noopener noreferrer" href="https://
 # whether to show link to Raw Markdown content of the post
 link_to_markdown = false
 # FixIt 0.3.0 | NEW whether to show link to view source code of the post
-link_to_source = false
+link_to_source = true
 # FixIt 0.3.0 | NEW whether to show link to edit the post
 link_to_edit = false
 # FixIt 0.3.0 | NEW whether to show link to report issue for the post
@@ -874,10 +984,6 @@ reading_time = true
 end_flag = ""
 # FixIt 0.2.18 | NEW whether to enable instant.page
 instant_page = false
-# FixIt 0.3.0 | NEW whether to enable collection list at the sidebar
-collection_list = false
-# FixIt 0.3.0 | NEW whether to enable collection navigation at the end of the post
-collection_navigation = false
 
 # FixIt 0.2.15 | NEW Repost config
 [page.repost]
@@ -1016,12 +1122,12 @@ fullscreen = true
 
 # FixIt 0.3.0 | NEW Related content config (https://gohugo.io/content-management/related/)
 [page.related]
-enable = false
+enable = true
 count = 5
 # FixIt 0.3.20 | NEW position of related content, optional values: ["aside", "footer"]
 position = [
   "aside",
-  "footer"
+#  "footer"
 ]
 
 # FixIt 0.2.17 | NEW Donate (Sponsor) settings
@@ -1072,120 +1178,6 @@ Mix = false
 [page.comment]
 enable = true
 
-# FixIt 0.2.13 | NEW Artalk comment config (https://artalk.js.org/)
-[page.comment.artalk]
-enable = false
-server = "https://yourdomain"
-site = "默认站点"
-# FixIt 0.3.3 | NEW whether use backend configuration
-use_backend_conf = false
-placeholder = ""
-no_comment = ""
-send_btn = ""
-editor_travel = true
-flat_mode = "auto"
-# FixIt 0.2.17 | CHANGED enable lightgallery support
-lightgallery = false
-locale = "" # FixIt 0.2.15 | NEW
-# FixIt 0.2.18 | NEW
-emoticons = ""
-nest_max = 2
-nest_sort = "DATE_ASC" # ["DATE_ASC", "DATE_DESC", "VOTE_UP_DESC"]
-vote = true
-vote_down = false
-ua_badge = true
-list_sort = true
-img_upload = true
-preview = true
-version_check = true
-
-# Disqus comment config (https://disqus.com)
-[page.comment.disqus]
-enable = false
-# Disqus shortname to use Disqus in posts
-shortname = ""
-
-# Gitalk comment config (https://github.com/gitalk/gitalk)
-[page.comment.gitalk]
-enable = false
-owner = ""
-repo = ""
-client_id = ""
-client_secret = ""
-
-# Valine comment config (https://github.com/xCss/Valine)
-[page.comment.valine]
-enable = false
-app_id = ""
-app_key = ""
-placeholder = ""
-avatar = "mp"
-meta = [
-  'nick',
-  'mail',
-  'link'
-]
-required_fields = []
-page_size = 10
-lang = ""
-visitor = true
-record_ip = true
-highlight = true
-enable_qq = false
-server_urls = ""
-# emoji data file name, default is "google.yml"
-# ["apple.yml", "google.yml", "facebook.yml", "twitter.yml"]
-# located in "themes/FixIt/assets/lib/valine/emoji/" directory
-# you can store your own data files in the same path under your project:
-# "assets/lib/valine/emoji/"
-emoji = ""
-comment_count = true
-
-# FixIt 0.2.13 | NEW
-# FixIt 0.2.16 | CHANGED Waline comment config (https://waline.js.org)
-[page.comment.waline]
-enable = false
-server_url = ""
-pageview = false # FixIt 0.2.15 | NEW
-emoji = [ "//unpkg.com/@waline/emojis@1.1.0/weibo" ]
-meta = [
-  "nick",
-  "mail",
-  "link"
-]
-required_meta = []
-login = "enable"
-word_limit = 0
-page_size = 10
-image_uploader = false # FixIt 0.2.15 | NEW
-highlighter = false # FixIt 0.2.15 | NEW
-comment = false # FixIt 0.2.15 | NEW
-tex_renderer = false # FixIt 0.2.16 | NEW
-search = false # FixIt 0.2.16 | NEW
-recaptcha_v3_key = "" # FixIt 0.2.16 | NEW
-turnstile_key = "" # FixIt 0.3.8 | NEW
-reaction = false
-
-# FixIt 0.2.18 | NEW
-# Facebook comment config (https://developers.facebook.com/docs/plugins/comments)
-[page.comment.facebook]
-enable = false
-width = "100%"
-num_posts = 10
-app_id = ""
-language_code = ""
-
-# Telegram comments config (https://comments.app)
-[page.comment.telegram]
-enable = false
-site_id = ""
-limit = 5
-height = ""
-color = ""
-colorful = true
-dislikes = false
-outlined = false
-
 # Commento comment config (https://commento.io)
 [page.comment.commento]
 enable = false
@@ -1199,19 +1191,6 @@ issue_term = "pathname"
 label = ""
 light_theme = "github-light"
 dark_theme = "github-dark"
-
-# FixIt 0.2.13 | NEW Twikoo comment config (https://twikoo.js.org/)
-[page.comment.twikoo]
-enable = false
-env_id = ""
-region = ""
-path = ""
-visitor = true
-comment_count = true
-# FixIt 0.2.17 | CHANGED enable lightgallery support
-lightgallery = false
-# FixIt 0.2.17 | NEW enable Katex support
-katex = false
 
 # FixIt 0.2.14 | NEW Giscus comments config
 [page.comment.giscus]
