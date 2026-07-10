@@ -18,8 +18,6 @@ lightgallery: false
 summary: "阅读下标准库：database/sql 源码"
 categories:
   - Go
-# See details front matter: https://fixit.lruihao.cn/documentation/content-management/introduction/#front-matter
-# 图标支持：https://fixit.lruihao.cn/zh-cn/documentation/content-management/diagrams-support/mermaid/
 ---
 
 > [!NOTE] 实在看不下去论文了，于是读一下 `database/sql` 源码

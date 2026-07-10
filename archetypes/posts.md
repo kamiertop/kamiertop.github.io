@@ -1,6 +1,5 @@
 ---
 title: '{{ replace .TranslationBaseName "-" " " | title }}'
-#subtitle: ""
 date: '{{ .Date }}'
 draft: false
 weight: 0
