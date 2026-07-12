@@ -8,8 +8,6 @@ hiddenFromHomePage: false
 hiddenFromSearch: false
 hiddenFromRss: false
 hiddenFromRelated: false
-description: ""
-toc: true
 lastmod: 2026-05-26T17:31:19+08:00
 math: true
 lightgallery: false
