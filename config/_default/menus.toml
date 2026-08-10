@@ -39,7 +39,7 @@
   identifier = "friends"
   name = "友链"
   url = "/friends/"
-  weight = 50
+  weight = 5
   [main.params]
     icon = "fa-solid fa-users-viewfinder fa-fw fa-sm"
 
@@ -47,6 +47,6 @@
   identifier = "about"
   name = "关于"
   url = "/about/"
-  weight = 100
+  weight = 60
   [main.params]
     icon = "fa-regular fa-id-card fa-fw fa-sm"

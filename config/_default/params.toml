@@ -534,8 +534,8 @@ sogou = ""
 
 # Site SEO config
 [seo]
-# image URL
-image = ""
+# cover image URL
+cover = ""
 # thumbnail URL
 thumbnail_url = ""
 
@@ -794,6 +794,95 @@ expand_details = true
 # whether to expand all file trees before printing
 expand_file_tree = false
 
+# Page-level default configurations (flattened from [page] in v1.0.0).
+author_avatar = true
+hidden_from_home_page = false
+hidden_from_search = false
+hidden_from_related = false
+hidden_from_feed = false
+twemoji = true
+lightgallery = false
+ruby = true
+fraction = true
+fontawesome = true
+page_style = "normal"
+auto_bookmark = false
+show_lastmod = true
+word_count = true
+reading_time = true
+end_flag = ""
+instant_page = false
+title_case_style = "ap"
+license = '<a rel="license external nofollow noopener noreferrer" href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a>'
+
+# Post link config (v1.0.0+)
+[post_link]
+markdown = false
+source = true
+edit = false
+report = false
+editor = "vscode"
+
+# Repost config
+[repost]
+enable = false
+url = ""
+
+# Expiration reminder config
+[expiration_reminder]
+enable = false
+reminder = 90
+warning = 180
+close_comment = false
+
+# Heading config
+[heading]
+capitalize = false
+
+[heading.number]
+enable = false
+only_main_section = true
+
+[heading.number.format]
+h1 = "{title}"
+h2 = "{h2} {title}"
+h3 = "{h2}.{h3} {title}"
+h4 = "{h2}.{h3}.{h4} {title}"
+h5 = "{h2}.{h3}.{h4}.{h5} {title}"
+h6 = "{h2}.{h3}.{h4}.{h5}.{h6} {title}"
+
+# Mapbox GL JS config
+[mapbox]
+access_token = ""
+light_style = "mapbox://styles/mapbox/light-v11"
+dark_style = "mapbox://styles/mapbox/dark-v11"
+navigation = true
+geolocate = true
+scale = true
+fullscreen = true
+
+# Reward (Sponsor) settings
+[reward]
+enable = false
+animation = false
+position = "after"
+mode = "static"
+
+[reward.ways]
+# wechatpay = "/images/wechatpay.png"
+# alipay = "/images/alipay.png"
+# paypal = "/images/paypal.png"
+# bitcoin = "/images/bitcoin.png"
+
+# Third-party library config
+[library]
+
+[library.css]
+# someCSS = "some.css"
+
+[library.js]
+# someJavascript = "some.js"
+
 # Global page feature defaults used by FixIt v0.4.6+.
 [toc]
 enable = true
@@ -928,190 +1017,3 @@ enable = false
 c4u = false
 # FixIt 0.4.0 | NEW Enable debug mode
 debug = false
-
-# Legacy page config kept for older FixIt compatibility.
-# For current FixIt v0.4.6+ global defaults, prefer the top-level tables above,
-# e.g. [toc], [math], [related], [share], [comment].
-[page]
-# FixIt 0.2.18 | NEW whether to enable the author's avatar of the post
-author_avatar = true
-title_case_style = "ap"
-# whether to hide a page from home page
-hidden_from_home_page = false
-# whether to hide a page from search results
-hidden_from_search = false
-# FixIt 0.3.0 | NEW whether to hide a page from related posts
-hidden_from_related = false
-# FixIt 0.3.10 | NEW whether to hide a page from RSS, Atom and JSON feed
-hidden_from_feed = false
-# whether to enable twemoji
-twemoji = true
-# FixIt 0.2.18 | CHANGED whether to enable lightgallery
-# set to true, images in the content will be shown as the gallery if the image has a title, e.g. ![alt](src "title")
-# set to "force", images in the content will be forced to shown as the gallery regardless of the image has a title or not, e.g. ![alt](src)
-# TODO change gallery engine in the future
-lightgallery = false
-# whether to enable the ruby extended syntax
-ruby = true
-# whether to enable the fraction extended syntax
-fraction = true
-# whether to enable the fontawesome extended syntax
-fontawesome = true
-# license info (HTML format is supported)
-license = '<a rel="license external nofollow noopener noreferrer" href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a>'
-# whether to show link to Raw Markdown content of the post
-link_to_markdown = false
-# FixIt 0.3.0 | NEW whether to show link to view source code of the post
-link_to_source = true
-# FixIt 0.3.0 | NEW whether to show link to edit the post
-link_to_edit = false
-# FixIt 0.3.0 | NEW whether to show link to report issue for the post
-link_to_report = false
-# FixIt 0.3.20 | NEW whether to show link to view the post in VSCode
-link_to_vscode = true
-# FixIt 0.3.10 | CHANGED Page style ["narrow", "normal", "wide", ...]
-page_style = "normal"
-# FixIt 0.2.17 | CHANGED Auto Bookmark Support
-# If true, save the reading progress when closing the page.
-auto_bookmark = false
-# FixIt 0.4.0 | NEW whether to show the last modified time
-show_lastmod = true
-# FixIt 0.2.17 | NEW whether to enable wordCount
-word_count = true
-# FixIt 0.2.17 | NEW whether to enable readingTime
-reading_time = true
-# FixIt 0.2.17 | NEW end of post flag
-end_flag = ""
-# FixIt 0.2.18 | NEW whether to enable instant.page
-instant_page = false
-
-# FixIt 0.2.15 | NEW Repost config
-[page.repost]
-enable = false
-url = ""
-
-# FixIt 0.2.13 | NEW Display a message at the beginning of an article to warn the reader that its content might be expired
-[page.expiration_reminder]
-enable = false
-# Display the reminder if the last modified time is more than 90 days ago
-reminder = 90
-# Display warning if the last modified time is more than 180 days ago
-warning = 180
-# If the article expires, close the comment or not
-close_comment = false
-
-# FixIt 0.3.0 | NEW page heading config
-[page.heading]
-# FixIt 0.3.3 | NEW whether to capitalize automatic text of headings
-capitalize = false
-
-# FixIt 0.3.12 | CHANGED must set `params.page.toc.ordered` to true
-[page.heading.number]
-# whether to enable auto heading numbering
-enable = false
-# FixIt 0.3.3 | NEW only enable in main section pages (default is posts)
-only_main_section = true
-
-[page.heading.number.format]
-h1 = "{title}"
-h2 = "{h2} {title}"
-h3 = "{h2}.{h3} {title}"
-h4 = "{h2}.{h3}.{h4} {title}"
-h5 = "{h2}.{h3}.{h4}.{h5} {title}"
-h6 = "{h2}.{h3}.{h4}.{h5}.{h6} {title}"
-
-# Mapbox GL JS config (https://docs.mapbox.com/mapbox-gl-js)
-[page.mapbox]
-# access token of Mapbox GL JS
-access_token = ""
-# style for the light theme
-light_style = "mapbox://styles/mapbox/light-v11"
-# style for the dark theme
-dark_style = "mapbox://styles/mapbox/dark-v11"
-# whether to add NavigationControl
-navigation = true
-# whether to add GeolocateControl
-geolocate = true
-# whether to add ScaleControl
-scale = true
-# whether to add FullscreenControl
-fullscreen = true
-
-# FixIt 0.3.0 | NEW Related content config (https://gohugo.io/content-management/related/)
-[page.related]
-enable = true
-count = 5
-# FixIt 0.3.20 | NEW position of related content, optional values: ["aside", "footer"]
-position = [
-  "aside",
-#  "footer"
-]
-
-# FixIt 0.2.17 | NEW Donate (Sponsor) settings
-[page.reward]
-enable = false
-animation = false
-# position relative to post footer, optional values: ["before", "after"]
-position = "after"
-# comment = "Buy me a coffee"
-# FixIt 0.2.18 | NEW display mode of QR code images, optional values: ["static", "fixed"], default: `static`
-mode = "static"
-
-[page.reward.ways]
-# wechatpay = "/images/wechatpay.png"
-# alipay = "/images/alipay.png"
-# paypal = "/images/paypal.png"
-# bitcoin = "/images/bitcoin.png"
-
-# Social share links in post page
-[page.share]
-enable = false
-Twitter = true
-Facebook = true
-Linkedin = false
-Whatsapp = false
-Pinterest = false
-Tumblr = false
-HackerNews = false
-Reddit = false
-VK = false
-Buffer = false
-Xing = false
-Line = false
-Instapaper = false
-Pocket = false
-Flipboard = false
-Weibo = true
-Myspace = false
-Blogger = false
-Baidu = false
-Odnoklassniki = false
-Evernote = false
-Skype = false
-Trello = false
-Mix = false
-
-# Third-party library config
-[page.library]
-
-[page.library.css]
-# someCSS = "some.css"
-# located in "assets/"
-# Or
-# someCSS = "https://cdn.example.com/some.css"
-
-[page.library.js]
-# someJavascript = "some.js"
-# located in "assets/"
-# Or
-# someJavascript = "https://cdn.example.com/some.js"
-
-# Page SEO config
-[page.seo]
-# image URL
-images = []
-
-# Publisher info
-[page.seo.publisher]
-name = ""
-logo_url = ""
