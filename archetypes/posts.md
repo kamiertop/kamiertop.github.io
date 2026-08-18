@@ -7,7 +7,6 @@ hiddenFromHomePage: false
 hiddenFromSearch: false
 hiddenFromRss: false
 hiddenFromRelated: false
-description: ""
 lastmod: '{{ .Date }}'
 lightgallery: false
 summary: ""
