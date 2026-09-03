@@ -738,7 +738,7 @@ black_list = []
 # code here
 # ```
 [codeblock]
-# whether to enable the code block wrapper
+# 开启代码块包裹器，默认开启
 wrapper = true
 # code block mode
 # available modes: ["classic", "mac", "simple", ...]
@@ -747,19 +747,19 @@ mode = "classic"
 # additional classes for the code block wrapper
 # e.g. "is-collapsed is-expanded line-nos-hidden line-wrapping"
 wrapper_class = ""
-# the maximum number of lines to show in the code block preview
+# 最大显示行数，超过该行数的代码块将会被折叠，用户可以点击展开查看更多
 max_shown_lines = 20
 # whether to show shadow effect for code blocks, available values: ["always", "hover", "never"]
-shadow = "never"
-# whether to enable code copy button
+shadow = "always"
+# 是否可以复制代码块内容，默认开启
 copyable = true
 # [classic] whether to enable code download button in the code block header
 downloadable = false
 # [classic] whether to enable code fullscreen button in the code block header
-fullscreen = false
-# [classic] whether to enable line numbers toggle button in the code block header
+fullscreen = true
+# [classic] 是否在代码块头部启用行号切换按钮
 line_nos_toggler = true
-# [classic] whether to enable toggle line wrapping button in the code block header
+# [classic] 是否在代码块头部启用切换自动换行按钮
 line_wrap_toggler = true
 # [classic][Experimental] whether to enable code edit button in the code block header
 editable = true

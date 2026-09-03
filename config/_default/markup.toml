@@ -5,18 +5,19 @@
 
 _merge = "shallow"
 
-# Syntax Highlighting (https://gohugo.io/content-management/syntax-highlighting)
+# 语码高亮，配置Hugo的参数 (https://gohugo.io/content-management/syntax-highlighting)
 [highlight]
-# ~~~~~~~~~~ necessary configurations ~~~~~~~~~~
 # https://github.com/hugo-fixit/FixIt/issues/43
 codeFences = true
+# true: 配置style就能切换主题；false：必须生成对应的CSS文件才能切换主题
 noClasses = false
-# ~~~~~~~~~~ necessary configurations ~~~~~~~~~~
 anchorLineNos = false
 guessSyntax = true
+# 开启行号
 lineNos = true
 lineNumbersInTable = true
-	lineNoStart = 1
+# 起始行号
+lineNoStart = 1
 
 # Goldmark is from Hugo 0.60 the default library used for Markdown
 # See: https://gohugo.io/configuration/markup/#goldmark
