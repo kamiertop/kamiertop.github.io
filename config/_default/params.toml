@@ -878,7 +878,6 @@ mode = "static"
 [library]
 
 [library.css]
-# someCSS = "some.css"
 
 [library.js]
 # someJavascript = "some.js"
