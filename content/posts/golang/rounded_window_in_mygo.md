@@ -1,5 +1,5 @@
 ---
-title: 使用 mygo 实现圆角窗口
+title: 使用 mygo 实现（无边框）圆角窗口
 date: '2026-10-24T18:16:27+08:00'
 draft: false
 weight: 0
@@ -9,7 +9,7 @@ hiddenFromRss: false
 hiddenFromRelated: false
 lastmod: '2026-10-24T18:16:27+08:00'
 lightgallery: false
-summary: ""
+summary: "记录如何使用 mygo 实现（无边框）圆角窗口"
 categories:
   - Go
 tags:
@@ -171,7 +171,7 @@ func chromeButton(c *ui.Context, key string, icon *ui.SVG, label string, danger 
 
 {{< image src="/golang/mygo3.png" caption="白色背景无边框效果演示，左右下三个方向全和背景融为一体了" >}}
 
-{{< image src="/golang/mygo4.png" caption="白色背景右边框效果演示" >}}
+{{< image src="/golang/mygo4.png" caption="白色背景有边框效果演示" >}}
 
 ```text {name="go.mod"}
 module mygo-demo
