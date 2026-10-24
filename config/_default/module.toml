@@ -8,4 +8,4 @@ path = "github.com/hugo-fixit/FixIt"
 
 [hugoVersion]
 extended = true
-min = "0.161.0"
+min = "0.166.0"

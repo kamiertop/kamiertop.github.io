@@ -615,7 +615,7 @@ object_fit = false
 enable = true
 permalink = "https://github.com/kamiertop/kamiertop.github.io"
 title = "在 GitHub 上查看源代码"
-position = "right" # ["left", "right"]
+position = "end" # ["start", "end"]
 
 # FixIt 0.2.14 | NEW Gravatar config
 [gravatar]
@@ -634,8 +634,8 @@ scrollpercent = false
 # FixIt 0.2.16 | NEW Reading progress bar
 [reading_progress]
 enable = true
-# Available values: ["left", "right"]
-start = "left"
+# Available values: ["start", "end"]
+start = "start"
 # Available values: ["top", "bottom"]
 position = "top"
 reversed = false
@@ -887,7 +887,7 @@ mode = "static"
 enable = true
 keep_static = false
 auto = true
-position = "right"
+position = "end"
 ordered = false
 start_level = 2
 end_level = 6
