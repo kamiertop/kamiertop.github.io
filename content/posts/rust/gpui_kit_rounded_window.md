@@ -20,6 +20,8 @@ tags:
 
 {{<link "https://github.com/longbridge/gpui-kit" "gpui-kit" "" true>}}
 
+> [!note] 核心是自定义`struct`，实现`Render trait`的`render`方法，设置root的rounded和border即可实现圆角和边框效果
+
 ```rust {name="src/main.rs" hl_lines=[18,21,22]}
 use gpui_kit::{component::TitleBar, *};
 
